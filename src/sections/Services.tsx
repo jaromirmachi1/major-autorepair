@@ -4,6 +4,7 @@ import { useRef, useState } from "react";
 import type { MouseEvent } from "react";
 import { Wrench, CircleDot, Battery, Shield, Wind, Search } from "lucide-react";
 import GlassSurface from "../components/GlassSurface";
+import { useLenis } from "../hooks/useLenis";
 
 interface SpotlightCardProps {
   children: React.ReactNode;
@@ -69,6 +70,7 @@ const SpotlightCard = ({ children, className = "" }: SpotlightCardProps) => {
 const Services = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
+  const { scrollToElement } = useLenis();
 
   const services = [
     {
@@ -191,9 +193,10 @@ const Services = () => {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={() =>
-              document
-                .getElementById("contact")
-                ?.scrollIntoView({ behavior: "smooth" })
+              scrollToElement("contact", {
+                duration: 1.0,
+                offset: -80,
+              })
             }
             className="relative"
           >

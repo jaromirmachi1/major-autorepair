@@ -1,7 +1,10 @@
 import { motion } from "framer-motion";
 import GlassSurface from "../components/GlassSurface";
+import { useLenis } from "../hooks/useLenis";
 
 const Hero = () => {
+  const { scrollToElement } = useLenis();
+
   return (
     <section
       id="hero"
@@ -57,9 +60,10 @@ const Hero = () => {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() =>
-                  document
-                    .getElementById("services")
-                    ?.scrollIntoView({ behavior: "smooth" })
+                  scrollToElement("services", {
+                    duration: 1.0,
+                    offset: -80,
+                  })
                 }
                 className="relative"
               >
@@ -85,9 +89,10 @@ const Hero = () => {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() =>
-                  document
-                    .getElementById("cars")
-                    ?.scrollIntoView({ behavior: "smooth" })
+                  scrollToElement("cars", {
+                    duration: 1.0,
+                    offset: -80,
+                  })
                 }
                 className="relative"
               >

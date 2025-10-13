@@ -6,6 +6,7 @@ import Services from "./sections/Services";
 import Cars from "./sections/Cars";
 import Contact from "./sections/Contact";
 import AdminApp from "./admin/AdminApp";
+import LenisProvider from "./components/LenisProvider";
 
 function App() {
   return (
@@ -18,7 +19,7 @@ function App() {
         <Route
           path="*"
           element={
-            <>
+            <LenisProvider>
               <Header />
               <main>
                 <Hero />
@@ -27,7 +28,7 @@ function App() {
                 <Contact />
               </main>
               <Footer />
-            </>
+            </LenisProvider>
           }
         />
       </Routes>

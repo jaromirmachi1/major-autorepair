@@ -155,7 +155,7 @@ const Cars = () => {
                           saturation={1.2}
                           className="py-3 px-6"
                         >
-                          <span className="text-black font-semibold">
+                          <span className="text-white font-semibold">
                             Zobrazit Detail
                           </span>
                         </GlassSurface>

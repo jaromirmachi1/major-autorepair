@@ -1,11 +1,13 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import GlassSurface from "./GlassSurface";
+import { useLenis } from "../hooks/useLenis";
 
 const Header = () => {
   const [activeSection, setActiveSection] = useState("hero");
   const [isOverLightBackground, setIsOverLightBackground] = useState(false);
   const [hoveredButton, setHoveredButton] = useState<string | null>(null);
+  const { scrollToElement } = useLenis();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -49,11 +51,12 @@ const Header = () => {
   }, []);
 
   const scrollToSection = (sectionId: string) => {
-    const element = document.getElementById(sectionId);
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
-      setActiveSection(sectionId);
-    }
+    scrollToElement(sectionId, {
+      duration: 1.0,
+      easing: (t: number) => (t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t), // Quadratic easing
+      offset: -80, // Account for fixed header
+    });
+    setActiveSection(sectionId);
   };
 
   const navLinks = [
