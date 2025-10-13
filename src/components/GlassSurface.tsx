@@ -185,17 +185,23 @@ const GlassSurface: React.FC<GlassSurfaceProps> = ({
   }, [width, height]);
 
   const supportsSVGFilters = () => {
-    const isWebkit =
-      /Safari/.test(navigator.userAgent) && !/Chrome/.test(navigator.userAgent);
-    const isFirefox = /Firefox/.test(navigator.userAgent);
+    // Force SVG filters for Chrome/Edge browsers
+    const isChrome =
+      /Chrome/.test(navigator.userAgent) && !/Edge/.test(navigator.userAgent);
+    const isEdge = /Edge/.test(navigator.userAgent);
 
-    if (isWebkit || isFirefox) {
-      return false;
+    if (isChrome || isEdge) {
+      return true;
     }
 
-    const div = document.createElement("div");
-    div.style.backdropFilter = `url(#${filterId})`;
-    return div.style.backdropFilter !== "";
+    // For other browsers, test SVG filter support
+    try {
+      const div = document.createElement("div");
+      div.style.backdropFilter = `url(#${filterId})`;
+      return div.style.backdropFilter !== "";
+    } catch {
+      return false;
+    }
   };
 
   const supportsBackdropFilter = () => {
@@ -215,6 +221,12 @@ const GlassSurface: React.FC<GlassSurfaceProps> = ({
 
     const svgSupported = supportsSVGFilters();
     const backdropFilterSupported = supportsBackdropFilter();
+
+    console.log("GlassSurface rendering:", {
+      svgSupported,
+      backdropFilterSupported,
+      isDarkMode,
+    });
 
     if (svgSupported) {
       return {

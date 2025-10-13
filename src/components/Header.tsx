@@ -149,18 +149,16 @@ const Header = () => {
                   }`}
                   style={
                     isOverLightBackground
-                      ? {
+                      ? ({
                           color: "#000000",
                           filter: "none",
                           mixBlendMode: "normal",
-                          WebkitFilter: "none",
-                          WebkitMixBlendMode: "normal",
-                        }
-                      : {
+                        } as React.CSSProperties)
+                      : ({
                           filter: "difference",
                           color: "white",
                           mixBlendMode: "difference",
-                        }
+                        } as React.CSSProperties)
                   }
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
@@ -180,18 +178,16 @@ const Header = () => {
                 }`}
                 style={
                   isOverLightBackground
-                    ? {
+                    ? ({
                         color: "#000000",
                         filter: "none",
                         mixBlendMode: "normal",
-                        WebkitFilter: "none",
-                        WebkitMixBlendMode: "normal",
-                      }
-                    : {
+                      } as React.CSSProperties)
+                    : ({
                         filter: "difference",
                         color: "white",
                         mixBlendMode: "difference",
-                      }
+                      } as React.CSSProperties)
                 }
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
