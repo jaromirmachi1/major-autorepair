@@ -1,12 +1,21 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import {
   signInWithPopup,
-  GoogleAuthProvider,
   signOut,
   onAuthStateChanged,
+  type Auth,
+  type GoogleAuthProvider,
 } from "firebase/auth";
 import type { User } from "firebase/auth";
-import { auth } from "../config/firebase";
+import {
+  auth as firebaseAuth,
+  googleProvider as firebaseGoogleProvider,
+  isFirebaseConfigured,
+} from "../config/firebase";
+
+// Type assertion to help TypeScript
+const auth = firebaseAuth as Auth;
+const googleProvider = firebaseGoogleProvider as GoogleAuthProvider;
 
 interface AuthContextType {
   user: User | null;
@@ -33,8 +42,20 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const signInWithGoogle = async () => {
     try {
-      const provider = new GoogleAuthProvider();
-      await signInWithPopup(auth, provider);
+      if (!isFirebaseConfigured) {
+        // Mock sign-in for development
+        console.warn("Using mock authentication (Firebase not configured)");
+        const mockUser = {
+          email: "admin@test.com",
+          displayName: "Test Admin",
+          uid: "mock-uid",
+          photoURL: null,
+        } as User;
+        setUser(mockUser);
+        return;
+      }
+
+      await signInWithPopup(auth, googleProvider);
     } catch (error) {
       console.error("Error signing in with Google:", error);
       throw error;
@@ -43,6 +64,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const logout = async () => {
     try {
+      if (!isFirebaseConfigured) {
+        // Mock sign-out for development
+        setUser(null);
+        return;
+      }
+
       await signOut(auth);
     } catch (error) {
       console.error("Error signing out:", error);
