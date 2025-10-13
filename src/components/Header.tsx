@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
+import GlassSurface from "./GlassSurface";
 
 const Header = () => {
   const [activeSection, setActiveSection] = useState("hero");
   const [isOverLightBackground, setIsOverLightBackground] = useState(false);
+  const [hoveredButton, setHoveredButton] = useState<string | null>(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -74,33 +76,72 @@ const Header = () => {
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.2 }}
-            className="backdrop-blur-xl border border-white/20 rounded-2xl px-4 py-3 shadow-2xl cursor-pointer"
-            style={{ backgroundColor: "#0000004b" }}
             onClick={() => scrollToSection("hero")}
           >
-            <img
-              src="/logo.svg"
-              alt="Marina Logo"
-              className="h-8 w-auto filter-difference"
-              style={{ filter: "difference" }}
-            />
+            <GlassSurface
+              width="auto"
+              height={60}
+              borderRadius={16}
+              brightness={20}
+              opacity={0.8}
+              blur={15}
+              displace={1.8}
+              backgroundOpacity={0.2}
+              saturation={1.2}
+              className="cursor-pointer px-4 py-3"
+            >
+              <AnimatePresence mode="wait">
+                <motion.img
+                  key={isOverLightBackground ? "black" : "white"}
+                  src={
+                    isOverLightBackground ? "/major-blacklogo.png" : "/logo.svg"
+                  }
+                  alt="Marina Logo"
+                  className="h-8 w-auto filter-difference"
+                  style={{ filter: "difference" }}
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.8 }}
+                  transition={{
+                    duration: 0.3,
+                    ease: "easeInOut",
+                  }}
+                />
+              </AnimatePresence>
+            </GlassSurface>
           </motion.div>
 
           {/* Navigation Container */}
-          <div
-            className="backdrop-blur-xl border border-white/20 rounded-2xl px-4 py-3 shadow-2xl"
-            style={{
-              backgroundColor: "#0000004b",
-            }}
+          <GlassSurface
+            width="auto"
+            height={60}
+            borderRadius={16}
+            brightness={20}
+            opacity={0.8}
+            blur={15}
+            displace={1.8}
+            backgroundOpacity={0.2}
+            saturation={1.2}
+            className="px-4 py-3"
           >
             <nav className="hidden md:flex items-center space-x-1">
               {navLinks.map((link, index) => (
                 <motion.button
                   key={link.name}
                   initial={{ opacity: 0, y: -20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.1 * index }}
+                  animate={{
+                    opacity:
+                      hoveredButton && hoveredButton !== link.href ? 0.4 : 1,
+                    y: 0,
+                  }}
+                  transition={{
+                    delay: 0.1 * index,
+                    duration: 0.3,
+                    ease: "easeInOut",
+                  }}
                   onClick={() => scrollToSection(link.href)}
+                  onMouseEnter={() => setHoveredButton(link.href)}
+                  onMouseLeave={() => setHoveredButton(null)}
                   className={`relative px-4 py-2 rounded-xl transition-all duration-300 font-medium text-sm ${
                     activeSection === link.href
                       ? "bg-white/20"
@@ -168,7 +209,7 @@ const Header = () => {
                 </svg>
               </motion.button>
             </div>
-          </div>
+          </GlassSurface>
         </div>
       </div>
     </motion.header>

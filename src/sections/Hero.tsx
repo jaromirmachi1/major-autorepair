@@ -17,42 +17,42 @@ const Hero = () => {
       title: "Generální Opravy",
       description:
         "Odborné mechanické opravy všech značek a modelů. Od diagnostiky motoru po práci na převodovce.",
-      color: "from-red-600 to-red-800",
+      color: "from-blue-600 to-blue-800",
     },
     {
       icon: CircleDot,
       title: "Servis Pneumatik",
       description:
         "Kompletní pneuservis včetně výměny, přezutí, vyvážení a geometrie kol.",
-      color: "from-orange-600 to-red-700",
+      color: "from-blue-500 to-blue-700",
     },
     {
       icon: Battery,
       title: "Baterie & Elektrika",
       description:
         "Kompletní diagnostika elektrických systémů, výměna baterií a alternátorů.",
-      color: "from-red-700 to-red-900",
+      color: "from-blue-700 to-blue-900",
     },
     {
       icon: Shield,
       title: "Brzdový Systém",
       description:
         "Profesionální kontrola brzd, výměna destiček, broušení kotoučů a opravy hydrauliky.",
-      color: "from-rose-600 to-red-800",
+      color: "from-blue-600 to-blue-800",
     },
     {
       icon: Wind,
       title: "Klimatizace & Topení",
       description:
         "Opravy klimatizace, doplnění chladiva a údržba systému HVAC.",
-      color: "from-red-600 to-rose-800",
+      color: "from-blue-500 to-blue-700",
     },
     {
       icon: Search,
       title: "Diagnostika",
       description:
         "Špičková počítačová diagnostika pro rychlé zjištění a řešení jakýchkoli problémů vozidla.",
-      color: "from-red-800 to-red-950",
+      color: "from-blue-800 to-blue-950",
     },
   ];
 

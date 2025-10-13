@@ -27,7 +27,7 @@ const Footer = () => {
             </p>
             <div className="flex space-x-4">
               <motion.a
-                whileHover={{ scale: 1.1, color: "#ED232D" }}
+                whileHover={{ scale: 1.1 }}
                 href="#"
                 className="text-white hover:text-red-primary transition-colors duration-300"
               >
@@ -40,7 +40,7 @@ const Footer = () => {
                 </svg>
               </motion.a>
               <motion.a
-                whileHover={{ scale: 1.1, color: "#ED232D" }}
+                whileHover={{ scale: 1.1 }}
                 href="#"
                 className="text-white hover:text-red-primary transition-colors duration-300"
               >
@@ -53,7 +53,7 @@ const Footer = () => {
                 </svg>
               </motion.a>
               <motion.a
-                whileHover={{ scale: 1.1, color: "#ED232D" }}
+                whileHover={{ scale: 1.1 }}
                 href="#"
                 className="text-white hover:text-red-primary transition-colors duration-300"
               >

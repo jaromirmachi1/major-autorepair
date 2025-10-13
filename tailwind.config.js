@@ -7,6 +7,7 @@ export default {
         "red-primary": "#ED232D",
         "red-dark": "#C41E26",
         "red-light": "#F04B54",
+        "red-primary-rgb": "237, 35, 45",
       },
       fontFamily: {
         sans: ["Epilogue", "system-ui", "sans-serif"],
