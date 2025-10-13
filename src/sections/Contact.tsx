@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { useInView } from "framer-motion";
 import { useRef, useState } from "react";
+import GlassSurface from "../components/GlassSurface";
 
 const Contact = () => {
   const ref = useRef(null);
@@ -135,9 +136,24 @@ const Contact = () => {
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 type="submit"
-                className="w-full bg-red-primary hover:bg-red-dark text-white font-semibold py-4 rounded-lg transition-all duration-300 text-lg"
+                className="w-full relative"
               >
-                Odeslat Zprávu
+                <GlassSurface
+                  width="100%"
+                  height={56}
+                  borderRadius={12}
+                  brightness={20}
+                  opacity={0.8}
+                  blur={15}
+                  displace={1.8}
+                  backgroundOpacity={0.3}
+                  saturation={1.2}
+                  className="py-4"
+                >
+                  <span className="text-black font-semibold text-lg">
+                    Odeslat Zprávu
+                  </span>
+                </GlassSurface>
               </motion.button>
             </form>
           </motion.div>

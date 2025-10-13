@@ -3,6 +3,7 @@ import { useInView } from "framer-motion";
 import { useRef, useState } from "react";
 import type { MouseEvent } from "react";
 import { Wrench, CircleDot, Battery, Shield, Wind, Search } from "lucide-react";
+import GlassSurface from "../components/GlassSurface";
 
 interface SpotlightCardProps {
   children: React.ReactNode;
@@ -194,9 +195,24 @@ const Services = () => {
                 .getElementById("contact")
                 ?.scrollIntoView({ behavior: "smooth" })
             }
-            className="px-8 py-4 bg-black text-white font-semibold rounded-lg hover:bg-red-primary transition-all duration-300 text-lg"
+            className="relative"
           >
-            Objednat Servis
+            <GlassSurface
+              width="auto"
+              height={56}
+              borderRadius={12}
+              brightness={20}
+              opacity={0.8}
+              blur={15}
+              displace={1.8}
+              backgroundOpacity={0.4}
+              saturation={1.2}
+              className="px-8 py-4"
+            >
+              <span className="text-black font-semibold text-lg">
+                Objednat Servis
+              </span>
+            </GlassSurface>
           </motion.button>
         </motion.div>
       </div>

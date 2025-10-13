@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { useState } from "react";
 import { useCars } from "../hooks/useCars";
+import GlassSurface from "../components/GlassSurface";
 
 const Cars = () => {
   const { cars: allCars, loading } = useCars();
@@ -140,9 +141,24 @@ const Cars = () => {
                       <motion.button
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
-                        className="absolute bottom-0 left-0 right-0 bg-white text-black py-3 px-6 font-semibold hover:bg-red-primary hover:text-white transition-all duration-300 opacity-0 group-hover:opacity-100 z-10"
+                        className="absolute bottom-0 left-0 right-0 opacity-0 group-hover:opacity-100 z-10"
                       >
-                        Zobrazit Detail
+                        <GlassSurface
+                          width="100%"
+                          height={48}
+                          borderRadius={0}
+                          brightness={20}
+                          opacity={0.8}
+                          blur={15}
+                          displace={1.8}
+                          backgroundOpacity={0.2}
+                          saturation={1.2}
+                          className="py-3 px-6"
+                        >
+                          <span className="text-black font-semibold">
+                            Zobrazit Detail
+                          </span>
+                        </GlassSurface>
                       </motion.button>
 
                       {/* Car Info - Slides up on hover */}
@@ -187,9 +203,24 @@ const Cars = () => {
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            className="px-8 py-4 bg-red-primary text-white font-semibold rounded-lg hover:bg-red-dark transition-all duration-300 text-lg"
+            className="relative"
           >
-            Zobrazit Veškerý Inventář
+            <GlassSurface
+              width="auto"
+              height={56}
+              borderRadius={12}
+              brightness={20}
+              opacity={0.8}
+              blur={15}
+              displace={1.8}
+              backgroundOpacity={0.3}
+              saturation={1.2}
+              className="px-8 py-4"
+            >
+              <span className="text-white font-semibold text-lg">
+                Zobrazit Veškerý Inventář
+              </span>
+            </GlassSurface>
           </motion.button>
         </motion.div>
       </div>

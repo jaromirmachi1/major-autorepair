@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import GlassSurface from "../components/GlassSurface";
 
 const Hero = () => {
   return (
@@ -30,17 +31,17 @@ const Hero = () => {
               initial={{ opacity: 0, y: 50 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
-              className="text-6xl md:text-7xl lg:text-8xl font-bold text-white mb-8 leading-tight"
+              className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight"
             >
               Váš Důvěryhodný
-              <span className="block text-red-primary mt-4">Auto Expert</span>
+              <span className="block text-red-primary mt-2">Auto Expert</span>
             </motion.h1>
 
             <motion.p
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.4 }}
-              className="text-xl md:text-2xl lg:text-3xl text-gray-300 mb-12 max-w-3xl mx-auto leading-relaxed"
+              className="text-lg md:text-xl lg:text-2xl text-gray-300 mb-8 max-w-2xl mx-auto leading-relaxed"
             >
               Profesionální autoservis a kvalitní ojetá vozidla. Dokonalost v
               každém detailu.
@@ -50,7 +51,7 @@ const Hero = () => {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.6 }}
-              className="flex flex-col sm:flex-row gap-6 justify-center items-center"
+              className="flex flex-col sm:flex-row gap-4 justify-center items-center"
             >
               <motion.button
                 whileHover={{ scale: 1.05 }}
@@ -60,9 +61,24 @@ const Hero = () => {
                     .getElementById("services")
                     ?.scrollIntoView({ behavior: "smooth" })
                 }
-                className="px-10 py-5 bg-red-primary hover:bg-red-dark text-white font-semibold rounded-xl shadow-2xl transition-all duration-300 text-xl"
+                className="relative"
               >
-                Naše Služby
+                <GlassSurface
+                  width="auto"
+                  height={56}
+                  borderRadius={12}
+                  brightness={20}
+                  opacity={0.8}
+                  blur={15}
+                  displace={1.8}
+                  backgroundOpacity={0.3}
+                  saturation={1.2}
+                  className="px-8 py-4"
+                >
+                  <span className="text-white font-semibold text-lg">
+                    Naše Služby
+                  </span>
+                </GlassSurface>
               </motion.button>
 
               <motion.button
@@ -73,9 +89,24 @@ const Hero = () => {
                     .getElementById("cars")
                     ?.scrollIntoView({ behavior: "smooth" })
                 }
-                className="px-10 py-5 bg-transparent border-2 border-white text-white font-semibold rounded-xl hover:bg-white hover:text-black transition-all duration-300 text-xl"
+                className="relative"
               >
-                Prohlédnout Auta
+                <GlassSurface
+                  width="auto"
+                  height={56}
+                  borderRadius={12}
+                  brightness={20}
+                  opacity={0.8}
+                  blur={15}
+                  displace={1.8}
+                  backgroundOpacity={0.1}
+                  saturation={1.2}
+                  className="px-8 py-4 border border-white/30"
+                >
+                  <span className="text-white font-semibold text-lg">
+                    Prohlédnout Auta
+                  </span>
+                </GlassSurface>
               </motion.button>
             </motion.div>
           </motion.div>
