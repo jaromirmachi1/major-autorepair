@@ -90,9 +90,7 @@ const Header = () => {
           <div
             className="backdrop-blur-xl border border-white/20 rounded-2xl px-4 py-3 shadow-2xl"
             style={{
-              backgroundColor: isOverLightBackground
-                ? "#0000004b"
-                : "#7878784b",
+              backgroundColor: "#0000004b",
             }}
           >
             <nav className="hidden md:flex items-center space-x-1">
@@ -111,7 +109,7 @@ const Header = () => {
                   style={
                     isOverLightBackground
                       ? {
-                          color: "#374151",
+                          color: "#000000",
                           filter: "none",
                           mixBlendMode: "normal",
                           WebkitFilter: "none",
@@ -142,7 +140,7 @@ const Header = () => {
                 style={
                   isOverLightBackground
                     ? {
-                        color: "#374151",
+                        color: "#000000",
                         filter: "none",
                         mixBlendMode: "normal",
                         WebkitFilter: "none",
