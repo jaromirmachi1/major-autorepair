@@ -1,11 +1,13 @@
 import { motion } from "framer-motion";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useCars } from "../hooks/useCars";
 import GlassSurface from "../components/GlassSurface";
 
 const Cars = () => {
   const { cars: allCars, loading } = useCars();
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const navigate = useNavigate();
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     const rect = e.currentTarget.getBoundingClientRect();
@@ -203,6 +205,7 @@ const Cars = () => {
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
+            onClick={() => navigate("/cars-inventory")}
             className="relative"
           >
             <GlassSurface

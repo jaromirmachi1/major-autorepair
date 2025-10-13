@@ -149,6 +149,14 @@ const Contact = () => {
                   backgroundOpacity={0.3}
                   saturation={1.2}
                   className="py-4"
+                  style={{
+                    background: "rgba(255, 255, 255, 0.3) !important",
+                    backdropFilter: "blur(15px) saturate(1.2) !important",
+                    WebkitBackdropFilter: "blur(15px) saturate(1.2) !important",
+                    border: "1px solid rgba(255, 255, 255, 0.3) !important",
+                    boxShadow:
+                      "0 8px 32px 0 rgba(31, 38, 135, 0.2), 0 2px 16px 0 rgba(31, 38, 135, 0.1), inset 0 1px 0 0 rgba(255, 255, 255, 0.4), inset 0 -1px 0 0 rgba(255, 255, 255, 0.2) !important",
+                  }}
                 >
                   <span className="text-black font-semibold text-lg">
                     Odeslat Zprávu

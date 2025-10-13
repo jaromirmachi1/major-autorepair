@@ -5,6 +5,7 @@ import Hero from "./sections/Hero";
 import Services from "./sections/Services";
 import Cars from "./sections/Cars";
 import Contact from "./sections/Contact";
+import CarsInventory from "./pages/CarsInventory";
 import AdminApp from "./admin/AdminApp";
 import LenisProvider from "./components/LenisProvider";
 
@@ -14,6 +15,9 @@ function App() {
       <Routes>
         {/* Admin Routes */}
         <Route path="/admin/*" element={<AdminApp />} />
+
+        {/* Cars Inventory Page */}
+        <Route path="/cars-inventory" element={<CarsInventory />} />
 
         {/* Main Website - Single Page */}
         <Route
