@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useNavigate, useLocation } from "react-router-dom";
 import GlassSurface from "./GlassSurface";
 import { useLenis } from "../hooks/useLenis";
 
@@ -8,6 +9,8 @@ const Header = () => {
   const [isOverLightBackground, setIsOverLightBackground] = useState(false);
   const [hoveredButton, setHoveredButton] = useState<string | null>(null);
   const { scrollToElement } = useLenis();
+  const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -51,11 +54,25 @@ const Header = () => {
   }, []);
 
   const scrollToSection = (sectionId: string) => {
-    scrollToElement(sectionId, {
-      duration: 1.0,
-      easing: (t: number) => (t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t), // Quadratic easing
-      offset: -80, // Account for fixed header
-    });
+    // If we're not on the homepage, navigate to homepage first
+    if (location.pathname !== "/") {
+      navigate("/");
+      // Wait for navigation to complete, then scroll
+      setTimeout(() => {
+        scrollToElement(sectionId, {
+          duration: 1.0,
+          easing: (t: number) => (t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t),
+          offset: -80,
+        });
+      }, 100);
+    } else {
+      // We're on homepage, just scroll
+      scrollToElement(sectionId, {
+        duration: 1.0,
+        easing: (t: number) => (t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t),
+        offset: -80,
+      });
+    }
     setActiveSection(sectionId);
   };
 
