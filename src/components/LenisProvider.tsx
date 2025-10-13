@@ -20,17 +20,17 @@ const LenisProvider: React.FC<LenisProviderProps> = ({ children }) => {
   useEffect(() => {
     // Initialize Lenis with ultra-smooth wheel scrolling
     lenisRef.current = new Lenis({
-      duration: 0.8, // Even faster for 240fps feel
+      duration: 0.6, // Slightly faster for better responsiveness
       easing: (t) => t * (2 - t), // Linear ease-out for maximum smoothness
       direction: "vertical",
       gestureDirection: "vertical",
       smooth: true,
-      mouseMultiplier: 0.8, // Reduced for smoother wheel steps
+      mouseMultiplier: 0.9, // Slightly increased for faster response
       smoothTouch: true,
       touchMultiplier: 1.2, // Smooth touch
       infinite: false,
-      lerp: 0.15, // Lower lerp for smoother wheel interpolation
-      wheelMultiplier: 0.6, // Much lower for ultra-smooth wheel steps
+      lerp: 0.2, // Slightly higher lerp for faster interpolation
+      wheelMultiplier: 0.7, // Slightly higher for faster wheel steps
       normalizeWheel: true, // Enable wheel normalization for consistency
     });
 

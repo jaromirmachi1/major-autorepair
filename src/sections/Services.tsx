@@ -168,8 +168,8 @@ const Services = () => {
               >
                 <SpotlightCard className="cursor-pointer h-full">
                   <div className="p-8">
-                    <div className="w-16 h-16 bg-red-primary rounded-lg flex items-center justify-center mb-4 transition-transform duration-300 hover:scale-110">
-                      <Icon className="w-8 h-8 text-white" strokeWidth={2} />
+                    <div className="w-16 h-16 bg-red-primary/10 text-red-primary rounded-xl flex items-center justify-center mb-4">
+                      <Icon className="w-8 h-8" strokeWidth={2} />
                     </div>
                     <h3 className="text-2xl font-bold text-black mb-3 transition-colors duration-300 hover:text-red-primary">
                       {service.title}
