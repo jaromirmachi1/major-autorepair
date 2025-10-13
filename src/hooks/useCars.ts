@@ -19,7 +19,9 @@ export interface Car {
   transmission: string;
   description: string;
   imageUrl: string;
+  imageUrls?: string[]; // Array of all images
   featured: boolean;
+  pinned: boolean; // Pinned cars show prominently on homepage
   features?: string[]; // Optional features array for homepage display
 }
 
@@ -40,6 +42,7 @@ const initialCars: Car[] = [
     imageUrl:
       "https://images.unsplash.com/photo-1555215695-3004980ad54e?w=800&q=80",
     featured: true,
+    pinned: true,
     features: ["Automatická", "Kožený Interiér", "Navigace"],
   },
   {
@@ -57,6 +60,7 @@ const initialCars: Car[] = [
     imageUrl:
       "https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=800&q=80",
     featured: true,
+    pinned: false,
     features: ["Premium Zvuk", "Panorama", "Sportovní Paket"],
   },
   {
@@ -74,6 +78,7 @@ const initialCars: Car[] = [
     imageUrl:
       "https://images.unsplash.com/photo-1606664515524-ed2f786a0bd6?w=800&q=80",
     featured: true,
+    pinned: true,
     features: ["Quattro AWD", "LED Světla", "Tech Paket"],
   },
   {
@@ -91,6 +96,7 @@ const initialCars: Car[] = [
     imageUrl:
       "https://images.unsplash.com/photo-1560958089-b8a1929cea89?w=800&q=80",
     featured: true,
+    pinned: false,
     features: ["Autopilot", "Premium Interiér", "Long Range"],
   },
   {
@@ -107,6 +113,7 @@ const initialCars: Car[] = [
     imageUrl:
       "https://images.unsplash.com/photo-1623869675781-80aa31bcc9e9?w=800&q=80",
     featured: false,
+    pinned: false,
     features: ["Luxury Paket", "Vyhřívané Sedačky", "Couvací Kamera"],
   },
   {
@@ -124,6 +131,7 @@ const initialCars: Car[] = [
     imageUrl:
       "https://images.unsplash.com/photo-1611821064430-f1c3f4f7e6c7?w=800&q=80",
     featured: true,
+    pinned: true,
     features: ["Sport Chrono", "Premium Audio", "Panoramatická Střecha"],
   },
 ];

@@ -21,8 +21,11 @@ function ManageCars() {
     description: "",
     imageUrl: "",
     featured: false,
+    pinned: false,
     features: [] as string[],
   });
+  const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
+  const [uploadError, setUploadError] = useState<string>("");
 
   const handleLogout = async () => {
     try {
@@ -31,6 +34,67 @@ function ManageCars() {
     } catch (error) {
       console.error("Logout failed:", error);
     }
+  };
+
+  const validateFile = (file: File): boolean => {
+    const allowedTypes = ["image/jpeg", "image/jpg", "image/png"];
+    const maxSize = 10 * 1024 * 1024; // 10MB
+
+    if (!allowedTypes.includes(file.type)) {
+      setUploadError(
+        `Soubor ${file.name} není podporovaný formát. Použijte pouze JPG nebo PNG.`
+      );
+      return false;
+    }
+
+    if (file.size > maxSize) {
+      setUploadError(
+        `Soubor ${file.name} je příliš velký. Maximální velikost je 10MB.`
+      );
+      return false;
+    }
+
+    return true;
+  };
+
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || []);
+    setUploadError("");
+
+    // Check total number of files
+    if (uploadedFiles.length + files.length > 20) {
+      setUploadError("Můžete nahrát maximálně 20 fotografií.");
+      return;
+    }
+
+    // Validate each file
+    const validFiles: File[] = [];
+    for (const file of files) {
+      if (validateFile(file)) {
+        validFiles.push(file);
+      } else {
+        return; // Stop if any file is invalid
+      }
+    }
+
+    setUploadedFiles((prev) => [...prev, ...validFiles]);
+  };
+
+  const removeFile = (index: number) => {
+    setUploadedFiles((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  const convertFilesToUrls = async (files: File[]): Promise<string[]> => {
+    const urls: string[] = [];
+    for (const file of files) {
+      const url = await new Promise<string>((resolve) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result as string);
+        reader.readAsDataURL(file);
+      });
+      urls.push(url);
+    }
+    return urls;
   };
 
   const handleInputChange = (
@@ -53,26 +117,44 @@ function ManageCars() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    // Validate that we have at least one image
+    if (uploadedFiles.length === 0 && !formData.imageUrl) {
+      setUploadError(
+        "Musíte nahrát alespoň jednu fotografii nebo zadat URL obrázku."
+      );
+      return;
+    }
+
     // Auto-format price for display if not provided
     const priceFormatted =
       formData.priceFormatted || `${formData.price.toLocaleString()} Kč`;
 
     try {
+      let imageUrls: string[] = [];
+
+      // Convert uploaded files to URLs
+      if (uploadedFiles.length > 0) {
+        imageUrls = await convertFilesToUrls(uploadedFiles);
+      }
+
+      // Add URL image if provided
+      if (formData.imageUrl) {
+        imageUrls.unshift(formData.imageUrl);
+      }
+
+      const carData = {
+        ...formData,
+        priceFormatted,
+        imageUrl: imageUrls[0], // First image as main image
+        imageUrls: imageUrls, // All images
+      };
+
       if (editingCar) {
         // Update existing car
-        await updateCar(editingCar.id, {
-          ...formData,
-          priceFormatted,
-        });
+        await updateCar(editingCar.id, carData);
       } else {
         // Add new car (pass userId for Firestore)
-        await addCar(
-          {
-            ...formData,
-            priceFormatted,
-          },
-          user?.uid
-        );
+        await addCar(carData, user?.uid);
       }
 
       // Reset form
@@ -88,8 +170,11 @@ function ManageCars() {
         description: "",
         imageUrl: "",
         featured: false,
+        pinned: false,
         features: [],
       });
+      setUploadedFiles([]);
+      setUploadError("");
       setIsFormOpen(false);
       setEditingCar(null);
     } catch (error) {
@@ -112,6 +197,7 @@ function ManageCars() {
       description: car.description,
       imageUrl: car.imageUrl,
       featured: car.featured,
+      pinned: car.pinned || false,
       features: car.features || [],
     });
     setIsFormOpen(true);
@@ -143,8 +229,11 @@ function ManageCars() {
       description: "",
       imageUrl: "",
       featured: false,
+      pinned: false,
       features: [],
     });
+    setUploadedFiles([]);
+    setUploadError("");
   };
 
   return (
@@ -300,19 +389,78 @@ function ManageCars() {
                       <option value="Manual">Manuální</option>
                     </select>
                   </div>
-                  <div>
+                  <div className="md:col-span-2">
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      URL obrázku *
+                      Fotografie vozidla *
                     </label>
-                    <input
-                      type="url"
-                      name="imageUrl"
-                      value={formData.imageUrl}
-                      onChange={handleInputChange}
-                      required
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                      placeholder="https://example.com/image.jpg"
-                    />
+                    <div className="space-y-4">
+                      {/* File Upload */}
+                      <div>
+                        <input
+                          type="file"
+                          multiple
+                          accept=".jpg,.jpeg,.png"
+                          onChange={handleFileUpload}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        />
+                        <p className="text-xs text-gray-500 mt-1">
+                          Můžete nahrát až 20 fotografií (JPG, PNG, max 10MB
+                          každá)
+                        </p>
+                      </div>
+
+                      {/* URL Input (Alternative) */}
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                          Nebo zadejte URL obrázku
+                        </label>
+                        <input
+                          type="url"
+                          name="imageUrl"
+                          value={formData.imageUrl}
+                          onChange={handleInputChange}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                          placeholder="https://example.com/image.jpg"
+                        />
+                      </div>
+
+                      {/* Error Message */}
+                      {uploadError && (
+                        <div className="text-red-600 text-sm bg-red-50 p-2 rounded">
+                          {uploadError}
+                        </div>
+                      )}
+
+                      {/* Uploaded Files Preview */}
+                      {uploadedFiles.length > 0 && (
+                        <div>
+                          <p className="text-sm font-medium text-gray-700 mb-2">
+                            Nahrané fotografie ({uploadedFiles.length}/20):
+                          </p>
+                          <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+                            {uploadedFiles.map((file, index) => (
+                              <div key={index} className="relative">
+                                <img
+                                  src={URL.createObjectURL(file)}
+                                  alt={`Preview ${index + 1}`}
+                                  className="w-full h-20 object-cover rounded border"
+                                />
+                                <button
+                                  type="button"
+                                  onClick={() => removeFile(index)}
+                                  className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs hover:bg-red-600"
+                                >
+                                  ×
+                                </button>
+                                <p className="text-xs text-gray-500 truncate mt-1">
+                                  {file.name}
+                                </p>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </div>
                   </div>
                 </div>
                 <div>
@@ -352,17 +500,31 @@ function ManageCars() {
                     stránce
                   </p>
                 </div>
-                <div className="flex items-center">
-                  <input
-                    type="checkbox"
-                    name="featured"
-                    checked={formData.featured}
-                    onChange={handleInputChange}
-                    className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
-                  />
-                  <label className="ml-2 text-sm font-medium text-gray-700">
-                    Prémiové vozidlo (zobrazí se na hlavní stránce)
-                  </label>
+                <div className="space-y-3">
+                  <div className="flex items-center">
+                    <input
+                      type="checkbox"
+                      name="featured"
+                      checked={formData.featured}
+                      onChange={handleInputChange}
+                      className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                    />
+                    <label className="ml-2 text-sm font-medium text-gray-700">
+                      Prémiové vozidlo (zobrazí se na hlavní stránce)
+                    </label>
+                  </div>
+                  <div className="flex items-center">
+                    <input
+                      type="checkbox"
+                      name="pinned"
+                      checked={formData.pinned}
+                      onChange={handleInputChange}
+                      className="w-4 h-4 text-yellow-600 border-gray-300 rounded focus:ring-yellow-500"
+                    />
+                    <label className="ml-2 text-sm font-medium text-gray-700">
+                      📌 Připnout vozidlo (zvýrazní se na hlavní stránce)
+                    </label>
+                  </div>
                 </div>
                 <div className="flex gap-4 pt-4">
                   <button
@@ -447,13 +609,13 @@ function ManageCars() {
                         {car.mileage.toLocaleString()} km
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        {car.featured ? (
-                          <span className="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                            Prémiové
+                        {car.pinned ? (
+                          <span className="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
+                            📌 Připnuto
                           </span>
                         ) : (
                           <span className="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">
-                            Běžné
+                            Nepřipnuto
                           </span>
                         )}
                       </td>
