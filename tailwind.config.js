@@ -10,7 +10,8 @@ export default {
         "red-primary-rgb": "237, 35, 45",
       },
       fontFamily: {
-        sans: ["Epilogue", "system-ui", "sans-serif"],
+        sans: ["PP Neue Montreal", "system-ui", "sans-serif"],
+        "pp-neue": ["PP Neue Montreal", "system-ui", "sans-serif"],
       },
       keyframes: {
         "border-spin": {
