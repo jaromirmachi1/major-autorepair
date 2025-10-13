@@ -1,16 +1,24 @@
-import { useEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import Lenis from "lenis";
-import { setLenisInstance } from "../hooks/useLenis";
 
 interface LenisProviderProps {
   children: React.ReactNode;
 }
 
+// Global Lenis instance for useLenis hook
+let lenisInstance: Lenis | null = null;
+
+export const setLenisInstance = (instance: Lenis | null) => {
+  lenisInstance = instance;
+};
+
+export const getLenisInstance = () => lenisInstance;
+
 const LenisProvider: React.FC<LenisProviderProps> = ({ children }) => {
   const lenisRef = useRef<Lenis | null>(null);
 
   useEffect(() => {
-    // Initialize Lenis
+    // Initialize Lenis with 240fps optimizations
     lenisRef.current = new Lenis({
       duration: 0.8, // Even faster for 240fps feel
       easing: (t) => t * (2 - t), // Linear ease-out for maximum smoothness

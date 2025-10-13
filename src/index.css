@@ -6,6 +6,45 @@
   scroll-behavior: smooth;
 }
 
+/* Enhanced smooth scrolling for better performance */
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 80px;
+}
+
+/* Optimize scrolling performance */
+* {
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Smooth mouse wheel scrolling - eliminate jumps */
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 80px;
+  /* Reduce scroll jumpiness */
+  scroll-snap-type: none;
+  overscroll-behavior: smooth;
+}
+
+body {
+  /* Smooth wheel scrolling */
+  scroll-behavior: smooth;
+  overscroll-behavior: smooth;
+  /* Reduce momentum scrolling jumps */
+  -webkit-overflow-scrolling: touch;
+  /* Smooth wheel events */
+  scroll-snap-type: none;
+}
+
+/* Smooth scrolling for all elements */
+* {
+  scroll-behavior: smooth;
+  /* Reduce scroll chunkyness */
+  scroll-snap-type: none;
+  overscroll-behavior: smooth;
+}
+
 body {
   margin: 0;
   padding: 0;

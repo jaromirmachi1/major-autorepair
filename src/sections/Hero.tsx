@@ -4,7 +4,6 @@ import { useLenis } from "../hooks/useLenis";
 
 const Hero = () => {
   const { scrollToElement } = useLenis();
-
   return (
     <section
       id="hero"
