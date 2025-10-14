@@ -27,7 +27,7 @@ const Footer = () => {
 
   return (
     <footer className="bg-black text-white py-16">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl xl:max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12">
         {/* Main Footer Content */}
         <div className="flex flex-col lg:flex-row justify-between items-start mb-12">
           {/* Left Section - Brand */}
