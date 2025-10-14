@@ -197,9 +197,9 @@ const Contact = () => {
                   <div>
                     <h4 className="font-semibold text-black mb-1">Adresa</h4>
                     <p className="text-gray-600">
-                      Hlavní 123
+                      Rybníček 18
                       <br />
-                      Praha 1, 110 00
+                      683 54 Bošovice
                     </p>
                   </div>
                 </div>
@@ -274,9 +274,15 @@ const Contact = () => {
               </div>
             </div>
 
-            {/* Map Placeholder */}
-            <div className="bg-gray-200 rounded-xl h-64 flex items-center justify-center">
-              <p className="text-gray-500">Integrace Mapy</p>
+            {/* Interactive Map */}
+            <div className="rounded-xl overflow-hidden h-64 shadow-lg">
+              <iframe
+                src="https://www.openstreetmap.org/export/embed.html?bbox=16.8349%2C49.0482%2C16.8389%2C49.0502&layer=mapnik&marker=49.0492%2C16.8369"
+                width="100%"
+                height="100%"
+                style={{ border: 0 }}
+                title="Mapa - Rybníček 18, 683 54 Bošovice"
+              ></iframe>
             </div>
           </motion.div>
         </div>
