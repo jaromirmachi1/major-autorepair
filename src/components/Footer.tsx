@@ -27,7 +27,7 @@ const Footer = () => {
 
   return (
     <footer className="bg-black text-white py-16">
-      <div className="max-w-7xl xl:max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12">
+      <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-12">
         {/* Main Footer Content */}
         <div className="flex flex-col lg:flex-row justify-between items-start mb-12">
           {/* Left Section - Brand */}
@@ -36,7 +36,7 @@ const Footer = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
-              className="text-2xl font-medium mb-2"
+              className="text-3xl font-medium mb-2"
             >
               AUTOCENTRUM MAJOR
             </motion.div>
@@ -45,20 +45,7 @@ const Footer = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.1 }}
               className="w-6 h-6 text-gray-400"
-            >
-              <svg
-                viewBox="0 0 24 24"
-                fill="currentColor"
-                className="w-full h-full"
-              >
-                <path
-                  d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"
-                  stroke="currentColor"
-                  strokeWidth="1"
-                  fill="none"
-                />
-              </svg>
-            </motion.div>
+            ></motion.div>
           </div>
 
           {/* Middle Section - Navigation */}
@@ -165,9 +152,7 @@ const Footer = () => {
               Cookie Policy
             </a>
           </div>
-          <div className="text-gray-400">
-            Designed and powered by UI Therapy
-          </div>
+          <div className="text-gray-400">Designed and powered by UITherapy</div>
         </motion.div>
       </div>
     </footer>

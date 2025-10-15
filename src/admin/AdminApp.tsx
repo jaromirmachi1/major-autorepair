@@ -1,8 +1,22 @@
 import { Routes, Route, Navigate } from "react-router-dom";
-import { AuthProvider, useAuth } from "./contexts/AuthContext";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
+import { CssBaseline } from "@mui/material";
+import { AuthProvider, useAuth } from "./contexts/SupabaseAuthContext";
 import AdminLogin from "./pages/AdminLogin.tsx";
 import AdminDashboard from "./pages/AdminDashboard.tsx";
 import ManageCars from "./pages/ManageCars.tsx";
+
+// Create MUI theme
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: "#ED232D", // Your red color
+    },
+    secondary: {
+      main: "#000000", // Black
+    },
+  },
+});
 
 // Protected Route Component
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
@@ -25,28 +39,34 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
 
 function AdminApp() {
   return (
-    <AuthProvider>
-      <Routes>
-        <Route path="/login" element={<AdminLogin />} />
-        <Route
-          path="/dashboard"
-          element={
-            <ProtectedRoute>
-              <AdminDashboard />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/manage-cars"
-          element={
-            <ProtectedRoute>
-              <ManageCars />
-            </ProtectedRoute>
-          }
-        />
-        <Route path="/" element={<Navigate to="/admin/dashboard" replace />} />
-      </Routes>
-    </AuthProvider>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <AuthProvider>
+        <Routes>
+          <Route path="/login" element={<AdminLogin />} />
+          <Route
+            path="/dashboard"
+            element={
+              <ProtectedRoute>
+                <AdminDashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/manage-cars"
+            element={
+              <ProtectedRoute>
+                <ManageCars />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/"
+            element={<Navigate to="/admin/dashboard" replace />}
+          />
+        </Routes>
+      </AuthProvider>
+    </ThemeProvider>
   );
 }
 

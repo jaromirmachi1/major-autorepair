@@ -75,6 +75,6 @@ main.tsx (BrowserRouter)
 
 ## Next Steps
 
-1. Configure Firebase in `src/admin/config/firebase.ts`
-2. Add your admin email to `src/admin/contexts/AuthContext.tsx`
+1. Configure Supabase in `.env.local` file
+2. Set up database and authentication in Supabase
 3. Test the complete flow

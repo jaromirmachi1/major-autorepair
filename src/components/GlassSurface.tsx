@@ -222,12 +222,6 @@ const GlassSurface: React.FC<GlassSurfaceProps> = ({
     const svgSupported = supportsSVGFilters();
     const backdropFilterSupported = supportsBackdropFilter();
 
-    console.log("GlassSurface rendering:", {
-      svgSupported,
-      backdropFilterSupported,
-      isDarkMode,
-    });
-
     if (svgSupported) {
       return {
         ...baseStyles,

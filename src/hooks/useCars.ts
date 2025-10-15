@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
-import { isFirebaseConfigured } from "../admin/config/firebase";
+import { isSupabaseConfigured } from "../config/supabase";
 import {
-  getCarsFromFirestore,
-  addCarToFirestore,
-  updateCarInFirestore,
-  deleteCarFromFirestore,
-} from "../services/carsService";
+  getCarsFromSupabase,
+  addCarToSupabase,
+  updateCarInSupabase,
+  deleteCarFromSupabase,
+} from "../services/supabaseCarsService";
 
 export interface Car {
   id: string;
@@ -142,17 +142,17 @@ export const useCars = () => {
   const [cars, setCars] = useState<Car[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // Initialize cars from Firestore or localStorage (fallback)
+  // Initialize cars from Supabase or localStorage (fallback)
   useEffect(() => {
     const loadCars = async () => {
       try {
-        if (isFirebaseConfigured) {
-          // Load from Firestore
-          const firestoreCars = await getCarsFromFirestore();
-          setCars(firestoreCars);
-          console.log("✅ Loaded cars from Firestore");
+        if (isSupabaseConfigured) {
+          // Load from Supabase
+          const supabaseCars = await getCarsFromSupabase();
+          setCars(supabaseCars);
+          console.log("✅ Loaded cars from Supabase");
         } else {
-          // Fallback to localStorage for development without Firebase
+          // Fallback to localStorage for development without Supabase
           const storedCars = localStorage.getItem(STORAGE_KEY);
 
           if (storedCars) {
@@ -182,7 +182,7 @@ export const useCars = () => {
             localStorage.setItem(STORAGE_KEY, JSON.stringify(initialCars));
             setCars(initialCars);
           }
-          console.log("⚠️ Using localStorage (Firebase not configured)");
+          console.log("⚠️ Using localStorage (Supabase not configured)");
         }
       } catch (error) {
         console.error("Error loading cars:", error);
@@ -209,14 +209,22 @@ export const useCars = () => {
 
   const addCar = async (car: Omit<Car, "id">, userId?: string) => {
     try {
-      if (isFirebaseConfigured && userId) {
-        // Add to Firestore
-        const carId = await addCarToFirestore(car, userId);
+      console.log("useCars addCar called with:", {
+        car,
+        userId,
+        isSupabaseConfigured,
+      });
+
+      if (isSupabaseConfigured && userId) {
+        // Add to Supabase
+        console.log("Using Supabase");
+        const carId = await addCarToSupabase(car, userId);
         const newCar: Car = { ...car, id: carId };
         setCars([newCar, ...cars]); // Add to beginning (newest first)
         return newCar;
       } else {
         // Fallback to localStorage
+        console.log("Using localStorage fallback");
         const newCar: Car = {
           ...car,
           id: Date.now().toString(),
@@ -233,9 +241,9 @@ export const useCars = () => {
 
   const updateCar = async (id: string, updates: Partial<Car>) => {
     try {
-      if (isFirebaseConfigured) {
-        // Update in Firestore
-        await updateCarInFirestore(id, updates);
+      if (isSupabaseConfigured) {
+        // Update in Supabase
+        await updateCarInSupabase(id, updates);
         const updatedCars = cars.map((car) =>
           car.id === id ? { ...car, ...updates } : car
         );
@@ -255,9 +263,9 @@ export const useCars = () => {
 
   const deleteCar = async (id: string) => {
     try {
-      if (isFirebaseConfigured) {
-        // Delete from Firestore
-        await deleteCarFromFirestore(id);
+      if (isSupabaseConfigured) {
+        // Delete from Supabase
+        await deleteCarFromSupabase(id);
         const updatedCars = cars.filter((car) => car.id !== id);
         setCars(updatedCars);
       } else {

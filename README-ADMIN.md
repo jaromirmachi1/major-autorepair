@@ -2,11 +2,11 @@
 
 ## Overview
 
-This admin panel allows you to manage your car inventory with Google OAuth authentication. Only authorized administrators can access the panel.
+This admin panel allows you to manage your car inventory with Supabase authentication. Only authorized administrators can access the panel.
 
 ## Features
 
-- 🔐 Google OAuth authentication
+- 🔐 Email/password authentication
 - 📊 Dashboard with statistics
 - 🚗 Complete car management (CRUD operations)
 - 📸 Image upload and management
@@ -15,74 +15,96 @@ This admin panel allows you to manage your car inventory with Google OAuth authe
 
 ## Setup Instructions
 
-### 1. Firebase Configuration
+### 1. Supabase Configuration
 
-1. Go to [Firebase Console](https://console.firebase.google.com/)
+1. Go to [Supabase Console](https://supabase.com)
 2. Create a new project or use existing one
-3. Enable Authentication and Firestore Database
-4. In Authentication, enable Google sign-in
-5. In Firestore, create a collection called `cars`
+3. Enable Authentication and Database
+4. Copy your project URL and anon key
 
-### 2. Update Firebase Config
+### 2. Update Supabase Config
 
-Edit `src/admin/config/firebase.ts` and replace the placeholder values with your actual Firebase config:
+Create `.env.local` file in your project root with your Supabase credentials:
 
-```typescript
-const firebaseConfig = {
-  apiKey: "your-actual-api-key",
-  authDomain: "your-project.firebaseapp.com",
-  projectId: "your-actual-project-id",
-  storageBucket: "your-project.appspot.com",
-  messagingSenderId: "123456789",
-  appId: "your-actual-app-id",
-};
+```env
+VITE_SUPABASE_URL=https://your-project.supabase.co
+VITE_SUPABASE_ANON_KEY=your-anon-key-here
 ```
 
-### 3. Set Admin Emails
+### 3. Database Setup
 
-Edit `src/admin/contexts/AuthContext.tsx` and update the `ADMIN_EMAILS` array with your admin email addresses:
+Run this SQL in the Supabase SQL Editor:
 
-```typescript
-const ADMIN_EMAILS = ["your-admin-email@gmail.com", "admin@yourcompany.com"];
+```sql
+-- Create cars table
+CREATE TABLE cars (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  name TEXT NOT NULL,
+  brand TEXT NOT NULL,
+  year INTEGER NOT NULL,
+  price INTEGER NOT NULL,
+  price_formatted TEXT,
+  mileage INTEGER NOT NULL,
+  fuel TEXT NOT NULL,
+  transmission TEXT NOT NULL,
+  description TEXT NOT NULL,
+  image_url TEXT NOT NULL,
+  image_urls TEXT[],
+  featured BOOLEAN DEFAULT false,
+  pinned BOOLEAN DEFAULT false,
+  features TEXT[],
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  created_by UUID REFERENCES auth.users(id),
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- Enable Row Level Security
+ALTER TABLE cars ENABLE ROW LEVEL SECURITY;
+
+-- Create policies
+CREATE POLICY "Users can view all cars" ON cars
+  FOR SELECT USING (true);
+
+CREATE POLICY "Authenticated users can insert cars" ON cars
+  FOR INSERT WITH CHECK (auth.uid() = created_by);
+
+CREATE POLICY "Users can update their own cars" ON cars
+  FOR UPDATE USING (auth.uid() = created_by);
+
+CREATE POLICY "Users can delete their own cars" ON cars
+  FOR DELETE USING (auth.uid() = created_by);
+
+-- Create storage bucket for car images
+INSERT INTO storage.buckets (id, name, public) VALUES ('car-images', 'car-images', true);
+
+-- Create storage policies
+CREATE POLICY "Anyone can view car images" ON storage.objects
+  FOR SELECT USING (bucket_id = 'car-images');
+
+CREATE POLICY "Authenticated users can upload car images" ON storage.objects
+  FOR INSERT WITH CHECK (bucket_id = 'car-images' AND auth.role() = 'authenticated');
+
+CREATE POLICY "Users can update their own car images" ON storage.objects
+  FOR UPDATE USING (bucket_id = 'car-images' AND auth.uid()::text = (storage.foldername(name))[1]);
+
+CREATE POLICY "Users can delete their own car images" ON storage.objects
+  FOR DELETE USING (bucket_id = 'car-images' AND auth.uid()::text = (storage.foldername(name))[1]);
 ```
 
-### 4. Firebase Storage Rules
+### 4. Create Admin User
 
-In Firebase Console, go to Storage and set these rules:
-
-```javascript
-rules_version = '2';
-service firebase.storage {
-  match /b/{bucket}/o {
-    match /cars/{allPaths=**} {
-      allow read, write: if request.auth != null;
-    }
-  }
-}
-```
-
-### 5. Firestore Security Rules
-
-In Firebase Console, go to Firestore and set these rules:
-
-```javascript
-rules_version = '2';
-service cloud.firestore {
-  match /databases/{database}/documents {
-    match /cars/{document} {
-      allow read, write: if request.auth != null;
-    }
-  }
-}
-```
+1. Go to Authentication → Users in Supabase
+2. Click "Add user"
+3. Create an admin user with email/password
+4. Note the user ID for admin privileges
 
 ## Usage
 
 ### Accessing the Admin Panel
 
 1. Navigate to `/admin` in your browser
-2. Click "Sign in with Google"
-3. Use your authorized admin email to sign in
+2. Use your admin email and password to sign in
+3. Access the dashboard and car management
 
 ### Managing Cars
 
@@ -106,30 +128,22 @@ Each car includes:
 
 ```
 src/admin/
-├── AdminApp.tsx              # Main admin app component
-├── components/
-│   ├── Layout.tsx            # Admin layout with sidebar
-│   └── ProtectedRoute.tsx    # Route protection
+├── AdminApp.tsx                    # Main admin app component
 ├── contexts/
-│   ├── AuthContext.tsx       # Authentication context
-│   └── CarsContext.tsx       # Car management context
+│   └── SupabaseAuthContext.tsx     # Supabase authentication context
 ├── pages/
-│   ├── Login.tsx             # Google OAuth login
-│   ├── Dashboard.tsx         # Admin dashboard
-│   ├── CarManagement.tsx     # Car listing and management
-│   ├── AddCar.tsx            # Add new car form
-│   └── EditCar.tsx           # Edit car form
-├── types/
-│   └── Car.ts                # TypeScript interfaces
+│   ├── AdminLogin.tsx              # Login page
+│   ├── AdminDashboard.tsx          # Admin dashboard
+│   └── ManageCars.tsx              # Car management
 └── config/
-    └── firebase.ts           # Firebase configuration
+    └── supabase.ts                 # Supabase configuration
 ```
 
 ## Security Features
 
-- **Email-based authorization**: Only specified emails can access admin panel
+- **Row Level Security**: Database policies protect data access
 - **Route protection**: All admin routes are protected
-- **Firebase security rules**: Database and storage are secured
+- **Supabase security**: Database and storage are secured
 - **Authentication state management**: Proper login/logout handling
 
 ## Customization
@@ -139,14 +153,14 @@ src/admin/
 1. Create new components in `src/admin/components/`
 2. Add new pages in `src/admin/pages/`
 3. Update routing in `AdminApp.tsx`
-4. Add navigation items in `Layout.tsx`
+4. Add navigation items in the layout
 
 ### Styling
 
 The admin panel uses Tailwind CSS classes. You can customize:
 
 - Colors: Update the red-primary color scheme
-- Layout: Modify the sidebar and main content areas
+- Layout: Modify the header and main content areas
 - Components: Customize individual form elements and cards
 
 ## Troubleshooting
@@ -155,21 +169,25 @@ The admin panel uses Tailwind CSS classes. You can customize:
 
 1. **Authentication not working**
 
-   - Check Firebase config is correct
-   - Verify Google sign-in is enabled in Firebase
-   - Ensure admin email is in the ADMIN_EMAILS array
+   - Check Supabase config is correct
+   - Verify user exists in Supabase Auth
+   - Check browser console for errors
 
 2. **Images not uploading**
 
-   - Check Firebase Storage rules
+   - Check Supabase Storage policies
    - Verify storage bucket is configured
    - Check browser console for errors
 
 3. **Cars not saving**
-   - Check Firestore rules
-   - Verify collection name is 'cars'
+   - Check database policies
+   - Verify table structure matches
    - Check browser console for errors
 
 ### Support
 
-For issues or questions, check the browser console for error messages and ensure all Firebase services are properly configured.
+For issues or questions, check the browser console for error messages and ensure all Supabase services are properly configured.
+
+## Development Mode
+
+If Supabase is not configured, the app will run in development mode using localStorage. This is useful for development and testing without setting up Supabase.

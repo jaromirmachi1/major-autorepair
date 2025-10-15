@@ -1,12 +1,16 @@
 import { useState } from "react";
-import { useAuth } from "../contexts/AuthContext";
+import { useAuth } from "../contexts/SupabaseAuthContext";
 import { useNavigate } from "react-router-dom";
 import { useCars, type Car } from "../../hooks/useCars";
+import { Snackbar, Alert } from "@mui/material";
+import { isSupabaseConfigured } from "../../config/supabase";
+import { createSupabaseImageService } from "../../services/supabaseImageService";
 
 function ManageCars() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const { cars, addCar, updateCar, deleteCar } = useCars();
+  const imageService = createSupabaseImageService();
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingCar, setEditingCar] = useState<Car | null>(null);
   const [formData, setFormData] = useState({
@@ -26,6 +30,22 @@ function ManageCars() {
   });
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
   const [uploadError, setUploadError] = useState<string>("");
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [snackbarSeverity, setSnackbarSeverity] = useState<"success" | "error">(
+    "success"
+  );
+  const [featuresInput, setFeaturesInput] = useState("");
+
+  const showNotification = (
+    message: string,
+    severity: "success" | "error" = "success"
+  ) => {
+    console.log("🔔 Showing notification:", { message, severity });
+    setSnackbarMessage(message);
+    setSnackbarSeverity(severity);
+    setSnackbarOpen(true);
+  };
 
   const handleLogout = async () => {
     try {
@@ -61,9 +81,10 @@ function ManageCars() {
     const files = Array.from(e.target.files || []);
     setUploadError("");
 
-    // Check total number of files
-    if (uploadedFiles.length + files.length > 20) {
-      setUploadError("Můžete nahrát maximálně 20 fotografií.");
+    // Check total number of files (limit based on storage type)
+    const maxFiles = isSupabaseConfigured ? 10 : 3;
+    if (uploadedFiles.length + files.length > maxFiles) {
+      setUploadError(`Můžete nahrát maximálně ${maxFiles} fotografií.`);
       return;
     }
 
@@ -85,16 +106,23 @@ function ManageCars() {
   };
 
   const convertFilesToUrls = async (files: File[]): Promise<string[]> => {
-    const urls: string[] = [];
-    for (const file of files) {
-      const url = await new Promise<string>((resolve) => {
-        const reader = new FileReader();
-        reader.onload = () => resolve(reader.result as string);
-        reader.readAsDataURL(file);
-      });
-      urls.push(url);
+    try {
+      // Limit based on storage type
+      const maxFiles = isSupabaseConfigured ? 10 : 3;
+      const limitedFiles = files.slice(0, maxFiles);
+
+      // Use image service to upload files
+      const results = await imageService.uploadMultipleImages(
+        limitedFiles,
+        `cars/${user?.id || "anonymous"}`
+      );
+
+      return results.map((result) => result.url);
+    } catch (error) {
+      console.error("Error uploading images:", error);
+      showNotification("Chyba při nahrávání obrázků", "error");
+      return [];
     }
-    return urls;
   };
 
   const handleInputChange = (
@@ -152,9 +180,13 @@ function ManageCars() {
       if (editingCar) {
         // Update existing car
         await updateCar(editingCar.id, carData);
+        showNotification("Vozidlo bylo úspěšně aktualizováno! 🚗", "success");
       } else {
         // Add new car (pass userId for Firestore)
-        await addCar(carData, user?.uid);
+        console.log("Adding car with user:", user);
+        console.log("Car data:", carData);
+        await addCar(carData, user?.id);
+        showNotification("Vozidlo bylo úspěšně přidáno! ✅", "success");
       }
 
       // Reset form
@@ -173,13 +205,17 @@ function ManageCars() {
         pinned: false,
         features: [],
       });
+      setFeaturesInput("");
       setUploadedFiles([]);
       setUploadError("");
       setIsFormOpen(false);
       setEditingCar(null);
     } catch (error) {
       console.error("Error saving car:", error);
-      alert("Chyba při ukládání vozidla. Zkuste to prosím znovu.");
+      showNotification(
+        "Chyba při ukládání vozidla. Zkuste to prosím znovu.",
+        "error"
+      );
     }
   };
 
@@ -200,6 +236,7 @@ function ManageCars() {
       pinned: car.pinned || false,
       features: car.features || [],
     });
+    setFeaturesInput((car.features || []).join(", "));
     setIsFormOpen(true);
   };
 
@@ -207,9 +244,13 @@ function ManageCars() {
     if (confirm("Opravdu chcete smazat toto vozidlo?")) {
       try {
         await deleteCar(id);
+        showNotification("Vozidlo bylo úspěšně smazáno! 🗑️", "success");
       } catch (error) {
         console.error("Error deleting car:", error);
-        alert("Chyba při mazání vozidla. Zkuste to prosím znovu.");
+        showNotification(
+          "Chyba při mazání vozidla. Zkuste to prosím znovu.",
+          "error"
+        );
       }
     }
   };
@@ -232,6 +273,7 @@ function ManageCars() {
       pinned: false,
       features: [],
     });
+    setFeaturesInput("");
     setUploadedFiles([]);
     setUploadError("");
   };
@@ -252,7 +294,7 @@ function ManageCars() {
           </div>
           <div className="flex items-center gap-4">
             <span className="text-sm text-gray-600">
-              {user?.displayName || user?.email}
+              {user?.displayName || user?.username}
             </span>
             <button
               onClick={handleLogout}
@@ -267,18 +309,24 @@ function ManageCars() {
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
         {/* Add Car Button */}
-        <div className="mb-6">
+        <div className="mb-6 flex gap-4">
           <button
             onClick={() => setIsFormOpen(true)}
             className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors font-semibold"
           >
             + Přidat nové vozidlo
           </button>
+          <button
+            onClick={() => showNotification("Test notification! 🧪", "success")}
+            className="bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition-colors font-semibold"
+          >
+            Test Snackbar
+          </button>
         </div>
 
         {/* Car Form Modal */}
         {isFormOpen && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-40">
             <div className="bg-white rounded-lg p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
               <h2 className="text-2xl font-bold mb-6">
                 {editingCar ? "Upravit vozidlo" : "Přidat nové vozidlo"}
@@ -404,8 +452,17 @@ function ManageCars() {
                           className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                         />
                         <p className="text-xs text-gray-500 mt-1">
-                          Můžete nahrát až 20 fotografií (JPG, PNG, max 10MB
-                          každá)
+                          {isSupabaseConfigured ? (
+                            <>
+                              Nahrávání do Supabase Storage - až 10 fotografií
+                              (JPG, PNG, max 10MB každá)
+                            </>
+                          ) : (
+                            <>
+                              Lokální úložiště (vývoj) - až 3 fotografie (JPG,
+                              PNG, max 10MB každá)
+                            </>
+                          )}
                         </p>
                       </div>
 
@@ -435,7 +492,8 @@ function ManageCars() {
                       {uploadedFiles.length > 0 && (
                         <div>
                           <p className="text-sm font-medium text-gray-700 mb-2">
-                            Nahrané fotografie ({uploadedFiles.length}/20):
+                            Nahrané fotografie ({uploadedFiles.length}/
+                            {isSupabaseConfigured ? 10 : 3}):
                           </p>
                           <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
                             {uploadedFiles.map((file, index) => (
@@ -484,8 +542,13 @@ function ManageCars() {
                   <input
                     type="text"
                     name="features"
-                    value={formData.features.join(", ")}
+                    value={featuresInput}
                     onChange={(e) => {
+                      // Just update the input value, don't process features yet
+                      setFeaturesInput(e.target.value);
+                    }}
+                    onBlur={(e) => {
+                      // Process features when user leaves the field
                       const features = e.target.value
                         .split(",")
                         .map((f) => f.trim())
@@ -497,7 +560,8 @@ function ManageCars() {
                   />
                   <p className="text-xs text-gray-500 mt-1">
                     Tyto vlastnosti budou zobrazeny jako odznaky na hlavní
-                    stránce
+                    stránce. Oddělte čárkami a stiskněte Tab nebo klikněte jinam
+                    pro uložení.
                   </p>
                 </div>
                 <div className="space-y-3">
@@ -641,6 +705,23 @@ function ManageCars() {
           )}
         </div>
       </main>
+
+      {/* Success/Error Notification */}
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={4000}
+        onClose={() => setSnackbarOpen(false)}
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+        sx={{ zIndex: 9999 }} // Ensure it's above modals
+      >
+        <Alert
+          onClose={() => setSnackbarOpen(false)}
+          severity={snackbarSeverity}
+          sx={{ width: "100%" }}
+        >
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
     </div>
   );
 }
