@@ -5,6 +5,7 @@ import { AuthProvider, useAuth } from "./contexts/SupabaseAuthContext";
 import AdminLogin from "./pages/AdminLogin.tsx";
 import AdminDashboard from "./pages/AdminDashboard.tsx";
 import ManageCars from "./pages/ManageCars.tsx";
+import AdminMessages from "./pages/AdminMessages.tsx";
 
 // Create MUI theme
 const theme = createTheme({
@@ -57,6 +58,14 @@ function AdminApp() {
             element={
               <ProtectedRoute>
                 <ManageCars />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/messages"
+            element={
+              <ProtectedRoute>
+                <AdminMessages />
               </ProtectedRoute>
             }
           />

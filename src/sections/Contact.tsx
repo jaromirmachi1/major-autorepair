@@ -2,6 +2,8 @@ import { motion } from "framer-motion";
 import { useInView } from "framer-motion";
 import { useRef, useState } from "react";
 import GlassSurface from "../components/GlassSurface";
+import { addMessageToSupabase } from "../services/supabaseMessagesService";
+import { isSupabaseConfigured } from "../config/supabase";
 
 const Contact = () => {
   const ref = useRef(null);
@@ -11,14 +13,50 @@ const Contact = () => {
     name: "",
     email: "",
     phone: "",
+    subject: "",
     message: "",
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState<
+    "idle" | "success" | "error"
+  >("idle");
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle form submission
-    console.log("Form submitted:", formData);
-    alert("Děkujeme za kontaktování! Brzy se vám ozveme.");
+    setIsSubmitting(true);
+    setSubmitStatus("idle");
+
+    try {
+      if (isSupabaseConfigured) {
+        // Save to Supabase
+        await addMessageToSupabase({
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone || undefined,
+          subject: formData.subject || "Kontaktní formulář",
+          message: formData.message,
+        });
+        console.log("✅ Message saved to Supabase");
+      } else {
+        // Fallback to console log for development
+        console.log("Form submitted (Supabase not configured):", formData);
+      }
+
+      setSubmitStatus("success");
+      // Reset form
+      setFormData({
+        name: "",
+        email: "",
+        phone: "",
+        subject: "",
+        message: "",
+      });
+    } catch (error) {
+      console.error("Error submitting form:", error);
+      setSubmitStatus("error");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleChange = (
@@ -107,9 +145,26 @@ const Contact = () => {
                   name="phone"
                   value={formData.phone}
                   onChange={handleChange}
-                  required
                   className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-red-primary focus:outline-none transition-colors duration-300"
                   placeholder="+420 123 456 789"
+                />
+              </div>
+
+              <div>
+                <label
+                  htmlFor="subject"
+                  className="block text-sm font-semibold text-gray-700 mb-2"
+                >
+                  Předmět
+                </label>
+                <input
+                  type="text"
+                  id="subject"
+                  name="subject"
+                  value={formData.subject}
+                  onChange={handleChange}
+                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-red-primary focus:outline-none transition-colors duration-300"
+                  placeholder="Např. Dotaz na opravu, Prodej vozidla..."
                 />
               </div>
 
@@ -132,11 +187,24 @@ const Contact = () => {
                 />
               </div>
 
+              {/* Status Messages */}
+              {submitStatus === "success" && (
+                <div className="p-4 bg-green-100 border border-green-400 text-green-700 rounded-lg">
+                  ✅ Děkujeme za kontaktování! Brzy se vám ozveme.
+                </div>
+              )}
+              {submitStatus === "error" && (
+                <div className="p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg">
+                  ❌ Chyba při odesílání zprávy. Zkuste to prosím znovu.
+                </div>
+              )}
+
               <motion.button
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
+                whileHover={{ scale: isSubmitting ? 1 : 1.02 }}
+                whileTap={{ scale: isSubmitting ? 1 : 0.98 }}
                 type="submit"
-                className="w-full relative"
+                disabled={isSubmitting}
+                className="w-full relative disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <GlassSurface
                   width="100%"
@@ -158,8 +226,33 @@ const Contact = () => {
                       "0 8px 32px 0 rgba(31, 38, 135, 0.2), 0 2px 16px 0 rgba(31, 38, 135, 0.1), inset 0 1px 0 0 rgba(255, 255, 255, 0.4), inset 0 -1px 0 0 rgba(255, 255, 255, 0.2) !important",
                   }}
                 >
-                  <span className="text-black font-semibold text-lg">
-                    Odeslat Zprávu
+                  <span className="text-black font-semibold text-lg flex items-center justify-center gap-2">
+                    {isSubmitting ? (
+                      <>
+                        <svg
+                          className="animate-spin h-5 w-5"
+                          viewBox="0 0 24 24"
+                        >
+                          <circle
+                            className="opacity-25"
+                            cx="12"
+                            cy="12"
+                            r="10"
+                            stroke="currentColor"
+                            strokeWidth="4"
+                            fill="none"
+                          />
+                          <path
+                            className="opacity-75"
+                            fill="currentColor"
+                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                          />
+                        </svg>
+                        Odesílám...
+                      </>
+                    ) : (
+                      "Odeslat Zprávu"
+                    )}
                   </span>
                 </GlassSurface>
               </motion.button>

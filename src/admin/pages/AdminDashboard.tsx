@@ -124,7 +124,10 @@ function AdminDashboard() {
                   Přidat, upravit nebo odebrat vozidla
                 </div>
               </button>
-              <button className="bg-purple-600 text-white px-4 py-3 rounded-lg hover:bg-purple-700 transition-colors text-left">
+              <button
+                onClick={() => navigate("/admin/messages")}
+                className="bg-purple-600 text-white px-4 py-3 rounded-lg hover:bg-purple-700 transition-colors text-left"
+              >
                 <div className="font-semibold">Zobrazit zprávy</div>
                 <div className="text-sm opacity-90">
                   Zkontrolovat odeslaná kontaktní formuláře
