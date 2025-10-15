@@ -1,0 +1,4 @@
+# Vercel redirects for SPA routing
+/admin/*    /index.html   200
+/cars-inventory    /index.html   200
+/*    /index.html   200
