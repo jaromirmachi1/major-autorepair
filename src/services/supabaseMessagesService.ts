@@ -60,7 +60,7 @@ export const getMessagesFromSupabase = async (): Promise<ContactMessage[]> => {
       throw error;
     }
 
-    const messages: ContactMessage[] = data.map((item) => ({
+    const messages: ContactMessage[] = data.map((item: any) => ({
       id: item.id,
       name: item.name,
       email: item.email,
