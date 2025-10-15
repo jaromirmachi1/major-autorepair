@@ -36,6 +36,8 @@ function ManageCars() {
     "success"
   );
   const [featuresInput, setFeaturesInput] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [deletingCarId, setDeletingCarId] = useState<string | null>(null);
 
   const showNotification = (
     message: string,
@@ -153,6 +155,10 @@ function ManageCars() {
       return;
     }
 
+    // Set loading state
+    setIsSubmitting(true);
+    setUploadError("");
+
     // Auto-format price for display if not provided
     const priceFormatted =
       formData.priceFormatted || `${formData.price.toLocaleString()} Kč`;
@@ -216,6 +222,8 @@ function ManageCars() {
         "Chyba při ukládání vozidla. Zkuste to prosím znovu.",
         "error"
       );
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -242,6 +250,7 @@ function ManageCars() {
 
   const handleDelete = async (id: string) => {
     if (confirm("Opravdu chcete smazat toto vozidlo?")) {
+      setDeletingCarId(id);
       try {
         await deleteCar(id);
         showNotification("Vozidlo bylo úspěšně smazáno! 🗑️", "success");
@@ -251,6 +260,8 @@ function ManageCars() {
           "Chyba při mazání vozidla. Zkuste to prosím znovu.",
           "error"
         );
+      } finally {
+        setDeletingCarId(null);
       }
     }
   };
@@ -309,25 +320,53 @@ function ManageCars() {
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
         {/* Add Car Button */}
-        <div className="mb-6 flex gap-4">
+        <div className="mb-6">
           <button
             onClick={() => setIsFormOpen(true)}
             className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors font-semibold"
           >
             + Přidat nové vozidlo
           </button>
-          <button
-            onClick={() => showNotification("Test notification! 🧪", "success")}
-            className="bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition-colors font-semibold"
-          >
-            Test Snackbar
-          </button>
         </div>
 
         {/* Car Form Modal */}
         {isFormOpen && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-40">
-            <div className="bg-white rounded-lg p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="bg-white rounded-lg p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto relative">
+              {/* Loading Overlay */}
+              {isSubmitting && (
+                <div className="absolute inset-0 bg-white bg-opacity-90 flex items-center justify-center z-10 rounded-lg">
+                  <div className="text-center">
+                    <svg
+                      className="animate-spin h-8 w-8 text-blue-600 mx-auto mb-4"
+                      viewBox="0 0 24 24"
+                    >
+                      <circle
+                        className="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                        fill="none"
+                      />
+                      <path
+                        className="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                      />
+                    </svg>
+                    <p className="text-lg font-semibold text-gray-700">
+                      {editingCar
+                        ? "Aktualizuji vozidlo..."
+                        : "Přidávám vozidlo..."}
+                    </p>
+                    <p className="text-sm text-gray-500 mt-2">
+                      Ukládám do databáze, prosím čekejte
+                    </p>
+                  </div>
+                </div>
+              )}
               <h2 className="text-2xl font-bold mb-6">
                 {editingCar ? "Upravit vozidlo" : "Přidat nové vozidlo"}
               </h2>
@@ -593,9 +632,37 @@ function ManageCars() {
                 <div className="flex gap-4 pt-4">
                   <button
                     type="submit"
-                    className="flex-1 bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors font-semibold"
+                    disabled={isSubmitting}
+                    className="flex-1 bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors font-semibold disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                   >
-                    {editingCar ? "Aktualizovat vozidlo" : "Přidat vozidlo"}
+                    {isSubmitting ? (
+                      <>
+                        <svg
+                          className="animate-spin h-4 w-4"
+                          viewBox="0 0 24 24"
+                        >
+                          <circle
+                            className="opacity-25"
+                            cx="12"
+                            cy="12"
+                            r="10"
+                            stroke="currentColor"
+                            strokeWidth="4"
+                            fill="none"
+                          />
+                          <path
+                            className="opacity-75"
+                            fill="currentColor"
+                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                          />
+                        </svg>
+                        {editingCar ? "Aktualizuji..." : "Přidávám vozidlo..."}
+                      </>
+                    ) : editingCar ? (
+                      "Aktualizovat vozidlo"
+                    ) : (
+                      "Přidat vozidlo"
+                    )}
                   </button>
                   <button
                     type="button"
@@ -692,9 +759,35 @@ function ManageCars() {
                         </button>
                         <button
                           onClick={() => handleDelete(car.id)}
-                          className="text-red-600 hover:text-red-900"
+                          disabled={deletingCarId === car.id}
+                          className="text-red-600 hover:text-red-900 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1"
                         >
-                          Smazat
+                          {deletingCarId === car.id ? (
+                            <>
+                              <svg
+                                className="animate-spin h-3 w-3"
+                                viewBox="0 0 24 24"
+                              >
+                                <circle
+                                  className="opacity-25"
+                                  cx="12"
+                                  cy="12"
+                                  r="10"
+                                  stroke="currentColor"
+                                  strokeWidth="4"
+                                  fill="none"
+                                />
+                                <path
+                                  className="opacity-75"
+                                  fill="currentColor"
+                                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                                />
+                              </svg>
+                              Maže se...
+                            </>
+                          ) : (
+                            "Smazat"
+                          )}
                         </button>
                       </td>
                     </tr>
