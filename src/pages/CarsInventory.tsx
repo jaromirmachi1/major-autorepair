@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useCars } from "../hooks/useCars";
 import GlassSurface from "../components/GlassSurface";
 import Header from "../components/Header";
@@ -13,7 +13,7 @@ const CarsInventory = () => {
   }>({});
 
   const getCurrentImage = (car: any) => {
-    const images = car.images || [car.imageUrl];
+    const images = car.imageUrls || [car.imageUrl];
     const index = currentImageIndex[car.id] || 0;
     return images[index] || car.imageUrl;
   };
@@ -30,6 +30,35 @@ const CarsInventory = () => {
       ...prev,
       [carId]: ((prev[carId] || 0) - 1 + totalImages) % totalImages,
     }));
+  };
+
+  // Touch/swipe support
+  const handleTouchStart = (
+    e: React.TouchEvent,
+    carId: string,
+    totalImages: number
+  ) => {
+    const touch = e.touches[0];
+    const startX = touch.clientX;
+
+    const handleTouchEnd = (e: React.TouchEvent) => {
+      const touch = e.changedTouches[0];
+      const endX = touch.clientX;
+      const diff = startX - endX;
+
+      if (Math.abs(diff) > 50) {
+        // Minimum swipe distance
+        if (diff > 0) {
+          nextImage(carId, totalImages);
+        } else {
+          prevImage(carId, totalImages);
+        }
+      }
+
+      document.removeEventListener("touchend", handleTouchEnd);
+    };
+
+    document.addEventListener("touchend", handleTouchEnd as any);
   };
 
   if (loading) {
@@ -81,7 +110,7 @@ const CarsInventory = () => {
                 </div>
               ) : (
                 cars.map((car, index) => {
-                  const images = car.images || [car.imageUrl];
+                  const images = car.imageUrls || [car.imageUrl];
                   const hasMultipleImages = images.length > 1;
                   const currentImage = getCurrentImage(car);
 
@@ -107,7 +136,13 @@ const CarsInventory = () => {
                       </div>
 
                       {/* Card Content */}
-                      <div className="relative h-80 rounded-2xl overflow-hidden bg-black">
+                      <div
+                        className="relative h-80 rounded-2xl overflow-hidden bg-black"
+                        onTouchStart={(e) =>
+                          hasMultipleImages &&
+                          handleTouchStart(e, car.id, images.length)
+                        }
+                      >
                         {/* Background Image */}
                         <div className="absolute inset-0">
                           <img
@@ -127,10 +162,10 @@ const CarsInventory = () => {
                                 e.stopPropagation();
                                 prevImage(car.id, images.length);
                               }}
-                              className="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 bg-black/50 hover:bg-black/70 backdrop-blur-sm rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 z-20"
+                              className="absolute left-2 top-1/2 -translate-y-1/2 w-10 h-10 bg-black/60 hover:bg-red-primary/80 backdrop-blur-sm rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 z-20 border border-white/20 hover:border-red-primary/50"
                             >
                               <svg
-                                className="w-4 h-4 text-white"
+                                className="w-5 h-5 text-white"
                                 fill="none"
                                 stroke="currentColor"
                                 viewBox="0 0 24 24"
@@ -150,10 +185,10 @@ const CarsInventory = () => {
                                 e.stopPropagation();
                                 nextImage(car.id, images.length);
                               }}
-                              className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 bg-black/50 hover:bg-black/70 backdrop-blur-sm rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 z-20"
+                              className="absolute right-2 top-1/2 -translate-y-1/2 w-10 h-10 bg-black/60 hover:bg-red-primary/80 backdrop-blur-sm rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 z-20 border border-white/20 hover:border-red-primary/50"
                             >
                               <svg
-                                className="w-4 h-4 text-white"
+                                className="w-5 h-5 text-white"
                                 fill="none"
                                 stroke="currentColor"
                                 viewBox="0 0 24 24"
@@ -168,7 +203,7 @@ const CarsInventory = () => {
                             </button>
 
                             {/* Image Counter */}
-                            <div className="absolute top-2 left-2 bg-black/50 backdrop-blur-sm rounded-full px-2 py-1 text-xs text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20">
+                            <div className="absolute top-2 left-2 bg-black/70 backdrop-blur-sm rounded-full px-3 py-1 text-xs text-white font-medium border border-white/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20">
                               {(currentImageIndex[car.id] || 0) + 1} /{" "}
                               {images.length}
                             </div>

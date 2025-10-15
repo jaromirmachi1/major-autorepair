@@ -36,6 +36,25 @@ function AdminDashboard() {
               {user?.displayName || user?.username}
             </span>
             <button
+              onClick={() => navigate("/")}
+              className="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors text-sm font-semibold flex items-center gap-2"
+            >
+              <svg
+                className="w-4 h-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M10 19l-7-7m0 0l7-7m-7 7h18"
+                />
+              </svg>
+              Zpět na web
+            </button>
+            <button
               onClick={handleLogout}
               className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors text-sm font-semibold"
             >
@@ -105,22 +124,10 @@ function AdminDashboard() {
                   Přidat, upravit nebo odebrat vozidla
                 </div>
               </button>
-              <button className="bg-green-600 text-white px-4 py-3 rounded-lg hover:bg-green-700 transition-colors text-left">
-                <div className="font-semibold">Správa služeb</div>
-                <div className="text-sm opacity-90">
-                  Aktualizovat vaše služby
-                </div>
-              </button>
               <button className="bg-purple-600 text-white px-4 py-3 rounded-lg hover:bg-purple-700 transition-colors text-left">
                 <div className="font-semibold">Zobrazit zprávy</div>
                 <div className="text-sm opacity-90">
                   Zkontrolovat odeslaná kontaktní formuláře
-                </div>
-              </button>
-              <button className="bg-gray-600 text-white px-4 py-3 rounded-lg hover:bg-gray-700 transition-colors text-left">
-                <div className="font-semibold">Nastavení</div>
-                <div className="text-sm opacity-90">
-                  Konfigurace vašeho webu
                 </div>
               </button>
             </div>
