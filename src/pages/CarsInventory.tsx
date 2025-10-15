@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useCars } from "../hooks/useCars";
 import GlassSurface from "../components/GlassSurface";
 import Header from "../components/Header";
@@ -162,21 +162,34 @@ const CarsInventory = () => {
                                 e.stopPropagation();
                                 prevImage(car.id, images.length);
                               }}
-                              className="absolute left-2 top-1/2 -translate-y-1/2 w-10 h-10 bg-black/60 hover:bg-red-primary/80 backdrop-blur-sm rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 z-20 border border-white/20 hover:border-red-primary/50"
+                              className="absolute left-2 top-1/2 -translate-y-1/2 w-10 h-10 opacity-0 group-hover:opacity-100 transition-all duration-300 z-20"
                             >
-                              <svg
-                                className="w-5 h-5 text-white"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
+                              <GlassSurface
+                                width="100%"
+                                height="100%"
+                                borderRadius={20}
+                                brightness={20}
+                                opacity={0.8}
+                                blur={15}
+                                displace={1.8}
+                                backgroundOpacity={0.3}
+                                saturation={1.2}
+                                className="w-full h-full rounded-full flex items-center justify-center hover:brightness-30 transition-all duration-300"
                               >
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  strokeWidth={2}
-                                  d="M15 19l-7-7 7-7"
-                                />
-                              </svg>
+                                <svg
+                                  className="w-5 h-5 text-white hover:text-gray-400 transition-colors duration-200"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  viewBox="0 0 24 24"
+                                >
+                                  <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={2}
+                                    d="M15 19l-7-7 7-7"
+                                  />
+                                </svg>
+                              </GlassSurface>
                             </button>
 
                             {/* Next Arrow */}
@@ -185,27 +198,55 @@ const CarsInventory = () => {
                                 e.stopPropagation();
                                 nextImage(car.id, images.length);
                               }}
-                              className="absolute right-2 top-1/2 -translate-y-1/2 w-10 h-10 bg-black/60 hover:bg-red-primary/80 backdrop-blur-sm rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 z-20 border border-white/20 hover:border-red-primary/50"
+                              className="absolute right-2 top-1/2 -translate-y-1/2 w-10 h-10 opacity-0 group-hover:opacity-100 transition-all duration-300 z-20"
                             >
-                              <svg
-                                className="w-5 h-5 text-white"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
+                              <GlassSurface
+                                width="100%"
+                                height="100%"
+                                borderRadius={20}
+                                brightness={20}
+                                opacity={0.8}
+                                blur={15}
+                                displace={1.8}
+                                backgroundOpacity={0.3}
+                                saturation={1.2}
+                                className="w-full h-full rounded-full flex items-center justify-center hover:brightness-30 transition-all duration-300"
                               >
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  strokeWidth={2}
-                                  d="M9 5l7 7-7 7"
-                                />
-                              </svg>
+                                <svg
+                                  className="w-5 h-5 text-white hover:text-gray-400 transition-colors duration-200"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  viewBox="0 0 24 24"
+                                >
+                                  <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={2}
+                                    d="M9 5l7 7-7 7"
+                                  />
+                                </svg>
+                              </GlassSurface>
                             </button>
 
                             {/* Image Counter */}
-                            <div className="absolute top-2 left-2 bg-black/70 backdrop-blur-sm rounded-full px-3 py-1 text-xs text-white font-medium border border-white/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20">
-                              {(currentImageIndex[car.id] || 0) + 1} /{" "}
-                              {images.length}
+                            <div className="absolute top-2 left-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20">
+                              <GlassSurface
+                                width="auto"
+                                height={24}
+                                borderRadius={12}
+                                brightness={20}
+                                opacity={0.8}
+                                blur={15}
+                                displace={1.8}
+                                backgroundOpacity={0.3}
+                                saturation={1.2}
+                                className="px-3 py-1"
+                              >
+                                <span className="text-xs text-white font-medium">
+                                  {(currentImageIndex[car.id] || 0) + 1} /{" "}
+                                  {images.length}
+                                </span>
+                              </GlassSurface>
                             </div>
                           </>
                         )}
