@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useCars } from "../hooks/useCars";
 import GlassSurface from "../components/GlassSurface";
 import Header from "../components/Header";
@@ -8,6 +9,7 @@ import LenisProvider from "../components/LenisProvider";
 
 const CarsInventory = () => {
   const { cars, loading } = useCars();
+  const navigate = useNavigate();
   const [currentImageIndex, setCurrentImageIndex] = useState<{
     [key: string]: number;
   }>({});
@@ -268,6 +270,7 @@ const CarsInventory = () => {
                           <motion.button
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
+                            onClick={() => navigate(`/car/${car.id}`)}
                             className="absolute bottom-0 left-0 right-0 opacity-0 group-hover:opacity-100 transition-opacity duration-1000 ease-out"
                           >
                             <GlassSurface
