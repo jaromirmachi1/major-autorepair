@@ -41,6 +41,8 @@ CREATE TABLE cars (
   mileage INTEGER NOT NULL,
   fuel TEXT NOT NULL,
   transmission TEXT NOT NULL,
+  engine_volume TEXT,
+  power TEXT,
   description TEXT NOT NULL,
   image_url TEXT NOT NULL,
   image_urls TEXT[],
@@ -92,7 +94,25 @@ CREATE POLICY "Users can delete their own car images" ON storage.objects
 3. Try logging into admin panel
 4. Try adding a car
 
-## 6. Migration from localStorage
+## 6. Database Migration (if you already have a cars table)
+
+If you already have a cars table and need to add the new engine fields, run this migration:
+
+```sql
+-- Add new columns to the cars table
+ALTER TABLE cars 
+ADD COLUMN engine_volume TEXT,
+ADD COLUMN power TEXT;
+
+-- Update existing records with default values (optional)
+UPDATE cars 
+SET engine_volume = 'N/A', power = 'N/A' 
+WHERE engine_volume IS NULL OR power IS NULL;
+```
+
+Or use the migration file: `supabase-migration-add-engine-fields.sql`
+
+## 7. Migration from localStorage
 
 Your existing data will be migrated automatically when you:
 
