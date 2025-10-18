@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCars } from "../hooks/useCars";
-import GlassSurface from "../components/GlassSurface";
+import SimpleGlassSurface from "../components/SimpleGlassSurface";
 
 const Cars = () => {
   const { cars: allCars, loading } = useCars();
@@ -146,22 +146,16 @@ const Cars = () => {
                         onClick={() => navigate(`/car/${car.id}`)}
                         className="absolute bottom-0 left-0 right-0 opacity-0 group-hover:opacity-100 z-10 transition-opacity duration-1000 ease-out"
                       >
-                        <GlassSurface
+                        <SimpleGlassSurface
                           width="100%"
                           height={48}
                           borderRadius={0}
-                          brightness={20}
-                          opacity={0.8}
-                          blur={15}
-                          displace={1.8}
-                          backgroundOpacity={0.2}
-                          saturation={1.2}
                           className="py-3 px-6"
                         >
                           <span className="text-white font-semibold">
                             Zobrazit Detail
                           </span>
-                        </GlassSurface>
+                        </SimpleGlassSurface>
                       </motion.button>
 
                       {/* Car Info - Slides up on hover */}
@@ -209,22 +203,16 @@ const Cars = () => {
             onClick={() => navigate("/cars-inventory")}
             className="relative"
           >
-            <GlassSurface
+            <SimpleGlassSurface
               width="auto"
               height={56}
               borderRadius={12}
-              brightness={20}
-              opacity={0.8}
-              blur={15}
-              displace={1.8}
-              backgroundOpacity={0.3}
-              saturation={1.2}
               className="px-8 py-4"
             >
               <span className="text-white font-semibold text-lg">
                 Zobrazit Veškerý Inventář
               </span>
-            </GlassSurface>
+            </SimpleGlassSurface>
           </motion.button>
         </motion.div>
       </div>

@@ -5,9 +5,6 @@ export interface SimpleGlassSurfaceProps {
   width?: number | string;
   height?: number | string;
   borderRadius?: number;
-  blur?: number;
-  backgroundOpacity?: number;
-  saturation?: number;
   className?: string;
   style?: React.CSSProperties;
 }
@@ -17,9 +14,6 @@ const SimpleGlassSurface: React.FC<SimpleGlassSurfaceProps> = ({
   width = 200,
   height = 80,
   borderRadius = 20,
-  blur = 15,
-  backgroundOpacity = 0.2,
-  saturation = 1.2,
   className = "",
   style = {},
 }) => {
@@ -28,19 +22,23 @@ const SimpleGlassSurface: React.FC<SimpleGlassSurfaceProps> = ({
     width: typeof width === "number" ? `${width}px` : width,
     height: typeof height === "number" ? `${height}px` : height,
     borderRadius: `${borderRadius}px`,
-    background: `rgba(0, 0, 0, ${backgroundOpacity})`,
-    backdropFilter: `blur(${blur}px) saturate(${saturation})`,
-    WebkitBackdropFilter: `blur(${blur}px) saturate(${saturation})`,
+    background: "rgba(255, 255, 255, 0.1)",
+    backdropFilter: "blur(12px) saturate(1.8) brightness(1.2)",
+    WebkitBackdropFilter: "blur(12px) saturate(1.8) brightness(1.2)",
     border: "1px solid rgba(255, 255, 255, 0.2)",
     boxShadow: `
-      0 8px 32px rgba(0, 0, 0, 0.1),
-      inset 0 1px 0 rgba(255, 255, 255, 0.2),
-      inset 0 -1px 0 rgba(255, 255, 255, 0.1)
+      inset 0 1px 0 0 rgba(255, 255, 255, 0.2),
+      inset 0 -1px 0 0 rgba(255, 255, 255, 0.1),
+      0 8px 32px 0 rgba(31, 38, 135, 0.2),
+      0 2px 16px 0 rgba(31, 38, 135, 0.1)
     `,
   };
 
   return (
-    <div className={`relative ${className}`} style={containerStyles}>
+    <div
+      className={`relative flex items-center justify-center overflow-hidden transition-opacity duration-300 ease-out ${className}`}
+      style={containerStyles}
+    >
       <div className="w-full h-full flex items-center justify-center p-2 rounded-[inherit] relative z-10">
         {children}
       </div>

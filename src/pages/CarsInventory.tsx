@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCars } from "../hooks/useCars";
-import GlassSurface from "../components/GlassSurface";
+import SimpleGlassSurface from "../components/SimpleGlassSurface";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import LenisProvider from "../components/LenisProvider";
@@ -167,16 +167,10 @@ const CarsInventory = () => {
                               }}
                               className="absolute left-2 top-1/2 -translate-y-1/2 w-10 h-10 opacity-0 group-hover:opacity-100 transition-all duration-300 z-20"
                             >
-                              <GlassSurface
+                              <SimpleGlassSurface
                                 width="100%"
                                 height="100%"
                                 borderRadius={20}
-                                brightness={20}
-                                opacity={0.8}
-                                blur={15}
-                                displace={1.8}
-                                backgroundOpacity={0.3}
-                                saturation={1.2}
                                 className="w-full h-full rounded-full flex items-center justify-center hover:brightness-30 transition-all duration-300"
                               >
                                 <svg
@@ -192,7 +186,7 @@ const CarsInventory = () => {
                                     d="M15 19l-7-7 7-7"
                                   />
                                 </svg>
-                              </GlassSurface>
+                              </SimpleGlassSurface>
                             </button>
 
                             {/* Next Arrow */}
@@ -203,16 +197,10 @@ const CarsInventory = () => {
                               }}
                               className="absolute right-2 top-1/2 -translate-y-1/2 w-10 h-10 opacity-0 group-hover:opacity-100 transition-all duration-300 z-20"
                             >
-                              <GlassSurface
+                              <SimpleGlassSurface
                                 width="100%"
                                 height="100%"
                                 borderRadius={20}
-                                brightness={20}
-                                opacity={0.8}
-                                blur={15}
-                                displace={1.8}
-                                backgroundOpacity={0.3}
-                                saturation={1.2}
                                 className="w-full h-full rounded-full flex items-center justify-center hover:brightness-30 transition-all duration-300"
                               >
                                 <svg
@@ -228,28 +216,22 @@ const CarsInventory = () => {
                                     d="M9 5l7 7-7 7"
                                   />
                                 </svg>
-                              </GlassSurface>
+                              </SimpleGlassSurface>
                             </button>
 
                             {/* Image Counter */}
                             <div className="absolute top-2 left-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20">
-                              <GlassSurface
+                              <SimpleGlassSurface
                                 width="auto"
                                 height={24}
                                 borderRadius={12}
-                                brightness={20}
-                                opacity={0.8}
-                                blur={15}
-                                displace={1.8}
-                                backgroundOpacity={0.3}
-                                saturation={1.2}
                                 className="px-3 py-1"
                               >
                                 <span className="text-xs text-white font-medium">
                                   {(currentImageIndex[car.id] || 0) + 1} /{" "}
                                   {images.length}
                                 </span>
-                              </GlassSurface>
+                              </SimpleGlassSurface>
                             </div>
                           </>
                         )}
@@ -269,22 +251,16 @@ const CarsInventory = () => {
 
                           {/* CTA Overlay - Hidden by default, shown on hover */}
                           <div className="absolute bottom-0 left-0 right-0 opacity-0 group-hover:opacity-100 transition-opacity duration-1000 ease-out">
-                            <GlassSurface
+                            <SimpleGlassSurface
                               width="100%"
                               height={48}
                               borderRadius={0}
-                              brightness={20}
-                              opacity={0.8}
-                              blur={15}
-                              displace={1.8}
-                              backgroundOpacity={0.2}
-                              saturation={1.2}
                               className="py-3 px-6"
                             >
                               <span className="text-white font-semibold">
                                 Zobrazit Detail
                               </span>
-                            </GlassSurface>
+                            </SimpleGlassSurface>
                           </div>
 
                           {/* Car Info - Slides up on hover */}
@@ -337,22 +313,16 @@ const CarsInventory = () => {
                 onClick={() => window.history.back()}
                 className="relative"
               >
-                <GlassSurface
+                <SimpleGlassSurface
                   width="auto"
                   height={56}
                   borderRadius={12}
-                  brightness={20}
-                  opacity={0.8}
-                  blur={15}
-                  displace={1.8}
-                  backgroundOpacity={0.3}
-                  saturation={1.2}
                   className="px-8 py-4"
                 >
                   <span className="text-white font-semibold text-lg">
                     ← Zpět na Hlavní Stránku
                   </span>
-                </GlassSurface>
+                </SimpleGlassSurface>
               </motion.button>
             </motion.div>
           </div>
