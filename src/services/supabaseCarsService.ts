@@ -34,6 +34,8 @@ export const addCarToSupabase = async (
       mileage: carData.mileage,
       fuel: carData.fuel,
       transmission: carData.transmission,
+      engine_volume: carData.engineVolume,
+      power: carData.power,
       description: carData.description,
       image_url: carData.imageUrl,
       image_urls: carData.imageUrls,
@@ -92,6 +94,8 @@ export const getCarsFromSupabase = async (): Promise<Car[]> => {
       mileage: car.mileage,
       fuel: car.fuel,
       transmission: car.transmission,
+      engineVolume: car.engine_volume,
+      power: car.power,
       description: car.description,
       imageUrl: car.image_url,
       imageUrls: car.image_urls,
@@ -139,6 +143,9 @@ export const updateCarInSupabase = async (
     if (updates.fuel !== undefined) updateData.fuel = updates.fuel;
     if (updates.transmission !== undefined)
       updateData.transmission = updates.transmission;
+    if (updates.engineVolume !== undefined)
+      updateData.engine_volume = updates.engineVolume;
+    if (updates.power !== undefined) updateData.power = updates.power;
     if (updates.description !== undefined)
       updateData.description = updates.description;
     if (updates.imageUrl !== undefined) updateData.image_url = updates.imageUrl;

@@ -17,6 +17,8 @@ export interface Car {
   mileage: number;
   fuel: string;
   transmission: string;
+  engineVolume?: string; // Engine volume (e.g., "2.0L", "3.0L")
+  power?: string; // Engine power (e.g., "150 kW", "200 HP")
   description: string;
   imageUrl: string;
   imageUrls?: string[]; // Array of all images
@@ -37,6 +39,8 @@ const initialCars: Car[] = [
     mileage: 72000,
     fuel: "Gasoline",
     transmission: "Automatic",
+    engineVolume: "2.0L",
+    power: "190 kW",
     description:
       "Krásné BMW 3 Series v perfektním stavu s kompletní servisní historií.",
     imageUrl:
@@ -55,6 +59,8 @@ const initialCars: Car[] = [
     mileage: 61000,
     fuel: "Diesel",
     transmission: "Automatic",
+    engineVolume: "2.0L",
+    power: "143 kW",
     description:
       "Luxusní Mercedes C-Class s premium vybavením a nízkou spotřebou.",
     imageUrl:
@@ -73,6 +79,8 @@ const initialCars: Car[] = [
     mileage: 40000,
     fuel: "Gasoline",
     transmission: "Automatic",
+    engineVolume: "2.0L",
+    power: "180 kW",
     description:
       "Téměř nové Audi A4 s Quattro pohonem a špičkovou technologií.",
     imageUrl:
@@ -91,6 +99,8 @@ const initialCars: Car[] = [
     mileage: 48000,
     fuel: "Electric",
     transmission: "Automatic",
+    engineVolume: "Electric",
+    power: "283 kW",
     description:
       "Elektromobil budoucnosti s autopilot funkcí a dlouhým dojezdem.",
     imageUrl:
@@ -109,6 +119,8 @@ const initialCars: Car[] = [
     mileage: 67000,
     fuel: "Gasoline",
     transmission: "Automatic",
+    engineVolume: "3.5L",
+    power: "225 kW",
     description: "Japonská kvalita a spolehlivost v luxusním balení.",
     imageUrl:
       "https://images.unsplash.com/photo-1623869675781-80aa31bcc9e9?w=800&q=80",
@@ -126,6 +138,8 @@ const initialCars: Car[] = [
     mileage: 29000,
     fuel: "Gasoline",
     transmission: "Automatic",
+    engineVolume: "2.9L",
+    power: "280 kW",
     description:
       "Sportovní SUV s legendárním Porsche DNA a výjimečným výkonem.",
     imageUrl:

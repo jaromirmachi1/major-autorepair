@@ -111,7 +111,10 @@ const CarDetail = () => {
       <div className="min-h-screen bg-black">
         <Header />
         <main className="pt-20">
-          <div className="max-w-7xl xl:max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 py-20">
+          <div
+            className="max-w-7xl xl:max-w-[1600px] mx-4 px-4 sm:px-6 lg:px-8 xl:px-12 py-20 rounded-2xl"
+            style={{ backgroundColor: "#000" }}
+          >
             {/* Back Button */}
             <motion.div
               initial={{ opacity: 0, x: -30 }}
@@ -333,86 +336,160 @@ const CarDetail = () => {
                   <h3 className="text-xl font-semibold text-white mb-4">
                     Klíčové Specifikace
                   </h3>
-                  <div className="grid grid-cols-2 gap-4">
-                    <GlassSurface
-                      width="100%"
-                      height={80}
-                      borderRadius={12}
-                      brightness={20}
-                      opacity={0.8}
-                      blur={15}
-                      displace={1.8}
-                      backgroundOpacity={0.3}
-                      saturation={1.2}
-                      className="p-4"
-                    >
-                      <div className="text-center">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="flex items-center gap-4 p-4">
+                      <div className="w-12 h-12 flex items-center justify-center">
+                        <svg
+                          className="w-6 h-6 text-white"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                          />
+                        </svg>
+                      </div>
+                      <div>
                         <div className="text-2xl font-bold text-white">
                           {car.year}
                         </div>
                         <div className="text-sm text-gray-300">Rok výroby</div>
                       </div>
-                    </GlassSurface>
+                    </div>
 
-                    <GlassSurface
-                      width="100%"
-                      height={80}
-                      borderRadius={12}
-                      brightness={20}
-                      opacity={0.8}
-                      blur={15}
-                      displace={1.8}
-                      backgroundOpacity={0.3}
-                      saturation={1.2}
-                      className="p-4"
-                    >
-                      <div className="text-center">
+                    <div className="flex items-center gap-4 p-4">
+                      <div className="w-12 h-12 flex items-center justify-center">
+                        <svg
+                          className="w-6 h-6 text-white"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M13 10V3L4 14h7v7l9-11h-7z"
+                          />
+                        </svg>
+                      </div>
+                      <div>
                         <div className="text-2xl font-bold text-white">
                           {car.mileage.toLocaleString()}
                         </div>
                         <div className="text-sm text-gray-300">km</div>
                       </div>
-                    </GlassSurface>
+                    </div>
 
-                    <GlassSurface
-                      width="100%"
-                      height={80}
-                      borderRadius={12}
-                      brightness={20}
-                      opacity={0.8}
-                      blur={15}
-                      displace={1.8}
-                      backgroundOpacity={0.3}
-                      saturation={1.2}
-                      className="p-4"
-                    >
-                      <div className="text-center">
+                    <div className="flex items-center gap-4 p-4">
+                      <div className="w-12 h-12 flex items-center justify-center">
+                        <svg
+                          className="w-6 h-6 text-white"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z"
+                          />
+                        </svg>
+                      </div>
+                      <div>
                         <div className="text-lg font-bold text-white">
                           {car.fuel}
                         </div>
                         <div className="text-sm text-gray-300">Palivo</div>
                       </div>
-                    </GlassSurface>
+                    </div>
 
-                    <GlassSurface
-                      width="100%"
-                      height={80}
-                      borderRadius={12}
-                      brightness={20}
-                      opacity={0.8}
-                      blur={15}
-                      displace={1.8}
-                      backgroundOpacity={0.3}
-                      saturation={1.2}
-                      className="p-4"
-                    >
-                      <div className="text-center">
+                    <div className="flex items-center gap-4 p-4">
+                      <div className="w-12 h-12 flex items-center justify-center">
+                        <svg
+                          className="w-6 h-6 text-white"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
+                          />
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                          />
+                        </svg>
+                      </div>
+                      <div>
                         <div className="text-lg font-bold text-white">
                           {car.transmission}
                         </div>
                         <div className="text-sm text-gray-300">Převodovka</div>
                       </div>
-                    </GlassSurface>
+                    </div>
+
+                    {car.engineVolume && (
+                      <div className="flex items-center gap-4 p-4">
+                        <div className="w-12 h-12 flex items-center justify-center">
+                          <svg
+                            className="w-6 h-6 text-white"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"
+                            />
+                          </svg>
+                        </div>
+                        <div>
+                          <div className="text-lg font-bold text-white">
+                            {car.engineVolume}
+                          </div>
+                          <div className="text-sm text-gray-300">Objem</div>
+                        </div>
+                      </div>
+                    )}
+
+                    {car.power && (
+                      <div className="flex items-center gap-4 p-4">
+                        <div className="w-12 h-12 flex items-center justify-center">
+                          <svg
+                            className="w-6 h-6 text-white"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M13 10V3L4 14h7v7l9-11h-7z"
+                            />
+                          </svg>
+                        </div>
+                        <div>
+                          <div className="text-lg font-bold text-white">
+                            {car.power}
+                          </div>
+                          <div className="text-sm text-gray-300">Výkon</div>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </motion.div>
 
@@ -467,7 +544,7 @@ const CarDetail = () => {
                     opacity={0.8}
                     blur={15}
                     displace={1.8}
-                    backgroundOpacity={0.3}
+                    backgroundOpacity={0.1}
                     saturation={1.2}
                     className="p-6"
                   >

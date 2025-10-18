@@ -22,6 +22,8 @@ function ManageCars() {
     mileage: 0,
     fuel: "Gasoline",
     transmission: "Automatic",
+    engineVolume: "",
+    power: "",
     description: "",
     imageUrl: "",
     featured: false,
@@ -205,6 +207,8 @@ function ManageCars() {
         mileage: 0,
         fuel: "Gasoline",
         transmission: "Automatic",
+        engineVolume: "",
+        power: "",
         description: "",
         imageUrl: "",
         featured: false,
@@ -238,6 +242,8 @@ function ManageCars() {
       mileage: car.mileage,
       fuel: car.fuel,
       transmission: car.transmission,
+      engineVolume: car.engineVolume || "",
+      power: car.power || "",
       description: car.description,
       imageUrl: car.imageUrl,
       featured: car.featured,
@@ -278,6 +284,8 @@ function ManageCars() {
       mileage: 0,
       fuel: "Gasoline",
       transmission: "Automatic",
+      engineVolume: "",
+      power: "",
       description: "",
       imageUrl: "",
       featured: false,
@@ -475,6 +483,32 @@ function ManageCars() {
                       <option value="Automatic">Automatická</option>
                       <option value="Manual">Manuální</option>
                     </select>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Objem motoru
+                    </label>
+                    <input
+                      type="text"
+                      name="engineVolume"
+                      value={formData.engineVolume}
+                      onChange={handleInputChange}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      placeholder="např. 2.0L, 3.0L, Electric"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Výkon motoru
+                    </label>
+                    <input
+                      type="text"
+                      name="power"
+                      value={formData.power}
+                      onChange={handleInputChange}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      placeholder="např. 150 kW, 200 HP"
+                    />
                   </div>
                   <div className="md:col-span-2">
                     <label className="block text-sm font-medium text-gray-700 mb-1">
