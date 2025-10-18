@@ -123,6 +123,7 @@ const CarsInventory = () => {
                       animate={{ opacity: 1, scale: 1 }}
                       transition={{ duration: 0.5, delay: index * 0.1 }}
                       whileHover={{ scale: 1.02, y: -5 }}
+                      onClick={() => navigate(`/car/${car.id}`)}
                       className="relative group cursor-pointer rounded-2xl p-[2px] bg-gradient-to-r from-black via-black to-black hover:from-red-primary hover:via-red-light hover:to-red-primary transition-all duration-500"
                     >
                       {/* Animated Border Effect */}
@@ -266,13 +267,8 @@ const CarsInventory = () => {
                               `${car.price.toLocaleString()} Kč`}
                           </motion.div>
 
-                          {/* CTA Button - Hidden by default, shown on hover */}
-                          <motion.button
-                            whileHover={{ scale: 1.05 }}
-                            whileTap={{ scale: 0.95 }}
-                            onClick={() => navigate(`/car/${car.id}`)}
-                            className="absolute bottom-0 left-0 right-0 opacity-0 group-hover:opacity-100 transition-opacity duration-1000 ease-out"
-                          >
+                          {/* CTA Overlay - Hidden by default, shown on hover */}
+                          <div className="absolute bottom-0 left-0 right-0 opacity-0 group-hover:opacity-100 transition-opacity duration-1000 ease-out">
                             <GlassSurface
                               width="100%"
                               height={48}
@@ -289,7 +285,7 @@ const CarsInventory = () => {
                                 Zobrazit Detail
                               </span>
                             </GlassSurface>
-                          </motion.button>
+                          </div>
 
                           {/* Car Info - Slides up on hover */}
                           <div className="relative transform transition-transform duration-1000 ease-out group-hover:-translate-y-12 p-4 space-y-2">
