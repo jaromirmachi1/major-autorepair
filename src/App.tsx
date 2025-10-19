@@ -1,6 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
+import ScrollToTop from "./components/ScrollToTop";
 import Hero from "./sections/Hero";
 import Services from "./sections/Services";
 import Cars from "./sections/Cars";
@@ -12,7 +13,8 @@ import LenisProvider from "./components/LenisProvider";
 
 function App() {
   return (
-    <div className="antialiased">
+    <div className="antialiased w-full max-w-full overflow-x-hidden">
+      <ScrollToTop />
       <Routes>
         {/* Admin Routes */}
         <Route path="/admin/*" element={<AdminApp />} />

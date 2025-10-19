@@ -344,79 +344,91 @@ const CarDetail = () => {
                   <h3 className="text-xl font-semibold text-white mb-4">
                     Klíčové Specifikace
                   </h3>
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div className="flex items-center gap-4 p-4">
-                      <div className="w-12 h-12 flex items-center justify-center">
-                        <MdCalendarToday className="w-6 h-6 text-white" />
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
+                    <div className="flex items-center gap-2 md:gap-4 p-2 md:p-4">
+                      <div className="w-8 h-8 md:w-12 md:h-12 flex items-center justify-center">
+                        <MdCalendarToday className="w-4 h-4 md:w-6 md:h-6 text-white" />
                       </div>
                       <div>
-                        <div className="text-2xl font-bold text-white">
+                        <div className="text-lg md:text-2xl font-bold text-white">
                           {car.year}
                         </div>
-                        <div className="text-sm text-gray-300">Rok výroby</div>
+                        <div className="text-xs md:text-sm text-gray-300">
+                          Rok výroby
+                        </div>
                       </div>
                     </div>
 
-                    <div className="flex items-center gap-4 p-4">
-                      <div className="w-12 h-12 flex items-center justify-center">
-                        <MdSpeed className="w-6 h-6 text-white" />
+                    <div className="flex items-center gap-2 md:gap-4 p-2 md:p-4">
+                      <div className="w-8 h-8 md:w-12 md:h-12 flex items-center justify-center">
+                        <MdSpeed className="w-4 h-4 md:w-6 md:h-6 text-white" />
                       </div>
                       <div>
-                        <div className="text-2xl font-bold text-white">
+                        <div className="text-lg md:text-2xl font-bold text-white">
                           {car.mileage.toLocaleString()}
                         </div>
-                        <div className="text-sm text-gray-300">km</div>
+                        <div className="text-xs md:text-sm text-gray-300">
+                          km
+                        </div>
                       </div>
                     </div>
 
-                    <div className="flex items-center gap-4 p-4">
-                      <div className="w-12 h-12 flex items-center justify-center">
-                        <MdLocalGasStation className="w-6 h-6 text-white" />
+                    <div className="flex items-center gap-2 md:gap-4 p-2 md:p-4">
+                      <div className="w-8 h-8 md:w-12 md:h-12 flex items-center justify-center">
+                        <MdLocalGasStation className="w-4 h-4 md:w-6 md:h-6 text-white" />
                       </div>
                       <div>
-                        <div className="text-lg font-bold text-white">
+                        <div className="text-sm md:text-lg font-bold text-white">
                           {car.fuel}
                         </div>
-                        <div className="text-sm text-gray-300">Palivo</div>
+                        <div className="text-xs md:text-sm text-gray-300">
+                          Palivo
+                        </div>
                       </div>
                     </div>
 
-                    <div className="flex items-center gap-4 p-4">
-                      <div className="w-12 h-12 flex items-center justify-center">
-                        <MdSettings className="w-6 h-6 text-white" />
+                    <div className="flex items-center gap-2 md:gap-4 p-2 md:p-4">
+                      <div className="w-8 h-8 md:w-12 md:h-12 flex items-center justify-center">
+                        <MdSettings className="w-4 h-4 md:w-6 md:h-6 text-white" />
                       </div>
                       <div>
-                        <div className="text-lg font-bold text-white">
+                        <div className="text-sm md:text-lg font-bold text-white">
                           {car.transmission}
                         </div>
-                        <div className="text-sm text-gray-300">Převodovka</div>
+                        <div className="text-xs md:text-sm text-gray-300">
+                          Převodovka
+                        </div>
                       </div>
                     </div>
 
                     {car.engineVolume && (
-                      <div className="flex items-center gap-4 p-4">
-                        <div className="w-12 h-12 flex items-center justify-center">
-                          <TbEngine className="w-6 h-6 text-white" />
+                      <div className="flex items-center gap-2 md:gap-4 p-2 md:p-4">
+                        <div className="w-8 h-8 md:w-12 md:h-12 flex items-center justify-center">
+                          <TbEngine className="w-4 h-4 md:w-6 md:h-6 text-white" />
                         </div>
                         <div>
-                          <div className="text-lg font-bold text-white">
+                          <div className="text-sm md:text-lg font-bold text-white">
                             {car.engineVolume}
                           </div>
-                          <div className="text-sm text-gray-300">Objem</div>
+                          <div className="text-xs md:text-sm text-gray-300">
+                            Objem
+                          </div>
                         </div>
                       </div>
                     )}
 
                     {car.power && (
-                      <div className="flex items-center gap-4 p-4">
-                        <div className="w-12 h-12 flex items-center justify-center">
-                          <MdFlashOn className="w-6 h-6 text-white" />
+                      <div className="flex items-center gap-2 md:gap-4 p-2 md:p-4">
+                        <div className="w-8 h-8 md:w-12 md:h-12 flex items-center justify-center">
+                          <MdFlashOn className="w-4 h-4 md:w-6 md:h-6 text-white" />
                         </div>
                         <div>
-                          <div className="text-lg font-bold text-white">
+                          <div className="text-sm md:text-lg font-bold text-white">
                             {car.power}
                           </div>
-                          <div className="text-sm text-gray-300">Výkon</div>
+                          <div className="text-xs md:text-sm text-gray-300">
+                            Výkon
+                          </div>
                         </div>
                       </div>
                     )}
