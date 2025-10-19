@@ -8,6 +8,8 @@ const Header = () => {
   const [activeSection, setActiveSection] = useState("hero");
   const [isOverLightBackground, setIsOverLightBackground] = useState(false);
   const [hoveredButton, setHoveredButton] = useState<string | null>(null);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [clickedItem, setClickedItem] = useState<string | null>(null);
   const { scrollToElement } = useLenis();
   const navigate = useNavigate();
   const location = useLocation();
@@ -53,27 +55,50 @@ const Header = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // Handle body scroll lock when mobile menu is open
+  useEffect(() => {
+    if (isMobileMenuOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
+
+    // Cleanup on unmount
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, [isMobileMenuOpen]);
+
   const scrollToSection = (sectionId: string) => {
-    // If we're not on the homepage, navigate to homepage first
-    if (location.pathname !== "/") {
-      navigate("/");
-      // Wait for navigation to complete, then scroll
-      setTimeout(() => {
+    // Set clicked item for arrow animation
+    setClickedItem(sectionId);
+
+    // Wait for arrow animation to complete, then close menu and scroll
+    setTimeout(() => {
+      setIsMobileMenuOpen(false);
+      setClickedItem(null);
+
+      // If we're not on the homepage, navigate to homepage first
+      if (location.pathname !== "/") {
+        navigate("/");
+        // Wait for navigation to complete, then scroll
+        setTimeout(() => {
+          scrollToElement(sectionId, {
+            duration: 1.0,
+            easing: (t: number) => (t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t),
+            offset: -80,
+          });
+        }, 100);
+      } else {
+        // We're on homepage, just scroll
         scrollToElement(sectionId, {
           duration: 1.0,
           easing: (t: number) => (t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t),
           offset: -80,
         });
-      }, 100);
-    } else {
-      // We're on homepage, just scroll
-      scrollToElement(sectionId, {
-        duration: 1.0,
-        easing: (t: number) => (t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t),
-        offset: -80,
-      });
-    }
-    setActiveSection(sectionId);
+      }
+      setActiveSection(sectionId);
+    }, 600); // Wait for arrow animation to complete
   };
 
   const navLinks = [
@@ -200,6 +225,7 @@ const Header = () => {
             {/* Mobile Menu Button */}
             <div className="md:hidden">
               <motion.button
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                 className={`p-2 rounded-xl transition-all duration-300 ${
                   isOverLightBackground
                     ? "hover:bg-gray-800/10"
@@ -221,22 +247,123 @@ const Header = () => {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
-                <svg
-                  className="w-5 h-5"
-                  fill="none"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path d="M4 6h16M4 12h16M4 18h16"></path>
-                </svg>
+                <div className="w-5 h-5 flex flex-col justify-center items-center">
+                  <motion.span
+                    className="block w-5 h-0.5 bg-current mb-1"
+                    animate={{
+                      rotate: isMobileMenuOpen ? 45 : 0,
+                      y: isMobileMenuOpen ? 6 : 0,
+                    }}
+                    transition={{ duration: 0.3, ease: "easeInOut" }}
+                  />
+                  <motion.span
+                    className="block w-5 h-0.5 bg-current mb-1"
+                    animate={{
+                      opacity: isMobileMenuOpen ? 0 : 1,
+                    }}
+                    transition={{ duration: 0.3, ease: "easeInOut" }}
+                  />
+                  <motion.span
+                    className="block w-5 h-0.5 bg-current"
+                    animate={{
+                      rotate: isMobileMenuOpen ? -45 : 0,
+                      y: isMobileMenuOpen ? -6 : 0,
+                    }}
+                    transition={{ duration: 0.3, ease: "easeInOut" }}
+                  />
+                </div>
               </motion.button>
             </div>
           </GlassSurface>
         </div>
       </div>
+
+      {/* Mobile Navigation Overlay */}
+      <AnimatePresence>
+        {isMobileMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            className="fixed inset-0 z-40 md:hidden bg-black"
+            onClick={() => setIsMobileMenuOpen(false)}
+          >
+            {/* Mobile Menu Content */}
+            <motion.div
+              initial={{ y: -100, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: -100, opacity: 0 }}
+              transition={{ duration: 0.4, ease: "easeOut" }}
+              className="relative pt-20 px-6"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <nav className="flex flex-col">
+                {navLinks.map((link, index) => (
+                  <motion.div
+                    key={link.name}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{
+                      delay: 0.1 * index + 0.2,
+                      duration: 0.3,
+                      ease: "easeOut",
+                    }}
+                    className="relative"
+                  >
+                    <motion.button
+                      onClick={() => scrollToSection(link.href)}
+                      className={`w-full text-left  py-5 transition-all duration-300 font-medium text-xl text-white relative z-10 flex flex-col justify-center ${
+                        activeSection === link.href
+                          ? "text-white/80"
+                          : "hover:text-white/70"
+                      }`}
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                    >
+                      <span className="flex">
+                        {link.name}
+                        {/* Arrow icon positioned relative to text */}
+                        <motion.div
+                          className="ml-5"
+                          initial={{ opacity: 0.3, x: 0 }}
+                          animate={{
+                            opacity: clickedItem === link.href ? 1 : 0.3,
+                            x: clickedItem === link.href ? 400 : 0,
+                          }}
+                          transition={{
+                            duration: 0.8,
+                            ease: "easeInOut",
+                          }}
+                        >
+                          <svg
+                            className="w-6 h-6 text-white"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                            strokeWidth="2"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              d="M9 5l7 7-7 7"
+                            />
+                          </svg>
+                        </motion.div>
+                      </span>
+                    </motion.button>
+
+                    {/* White separator line - don't show after last item */}
+                    {index < navLinks.length - 1 && (
+                      <div className="w-full h-px bg-white/20" />
+                    )}
+                  </motion.div>
+                ))}
+              </nav>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </motion.header>
   );
 };
