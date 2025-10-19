@@ -99,7 +99,7 @@ const Header = () => {
         });
       }
       setActiveSection(sectionId);
-    }, 600); // Wait for arrow animation to complete
+    }, 1000); // Wait for car animation to complete
   };
 
   const navLinks = [
@@ -348,7 +348,7 @@ const Header = () => {
                             x: clickedItem === link.href ? 400 : 0,
                           }}
                           transition={{
-                            duration: 1.2,
+                            duration: 1.8,
                             ease: "easeInOut",
                           }}
                         >
