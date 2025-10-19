@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate, useLocation } from "react-router-dom";
+import { FaCarSide } from "react-icons/fa";
 import GlassSurface from "./GlassSurface";
 import { useLenis } from "../hooks/useLenis";
 
@@ -295,9 +296,24 @@ const Header = () => {
               animate={{ y: 0, opacity: 1 }}
               exit={{ y: -100, opacity: 0 }}
               transition={{ duration: 0.4, ease: "easeOut" }}
-              className="relative pt-20 px-6"
+              className="relative pt-20 px-6 h-full"
               onClick={(e) => e.stopPropagation()}
             >
+              {/* Logo */}
+              <motion.div
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1, duration: 0.3 }}
+                className="flex justify-center mb-8"
+              >
+                <img
+                  src="/logo.svg"
+                  alt="Marina Logo"
+                  className="h-12 w-auto filter-difference"
+                  style={{ filter: "difference" }}
+                />
+              </motion.div>
+
               <nav className="flex flex-col">
                 {navLinks.map((link, index) => (
                   <motion.div
@@ -323,7 +339,7 @@ const Header = () => {
                     >
                       <span className="flex">
                         {link.name}
-                        {/* Arrow icon positioned relative to text */}
+                        {/* Arrow/Car icon positioned relative to text */}
                         <motion.div
                           className="ml-5"
                           initial={{ opacity: 0.3, x: 0 }}
@@ -332,23 +348,42 @@ const Header = () => {
                             x: clickedItem === link.href ? 400 : 0,
                           }}
                           transition={{
-                            duration: 0.8,
+                            duration: 1.2,
                             ease: "easeInOut",
                           }}
                         >
-                          <svg
-                            className="w-6 h-6 text-white"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                            strokeWidth="2"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              d="M9 5l7 7-7 7"
-                            />
-                          </svg>
+                          <AnimatePresence mode="wait">
+                            {clickedItem === link.href ? (
+                              <motion.div
+                                key="car"
+                                initial={{ opacity: 0, scale: 0.8 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                exit={{ opacity: 0, scale: 0.8 }}
+                                transition={{ duration: 0.2 }}
+                              >
+                                <FaCarSide className="w-6 h-6 text-white" />
+                              </motion.div>
+                            ) : (
+                              <motion.svg
+                                key="arrow"
+                                className="w-6 h-6 text-white"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                                strokeWidth="2"
+                                initial={{ opacity: 0, scale: 0.8 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                exit={{ opacity: 0, scale: 0.8 }}
+                                transition={{ duration: 0.2 }}
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  d="M9 5l7 7-7 7"
+                                />
+                              </motion.svg>
+                            )}
+                          </AnimatePresence>
                         </motion.div>
                       </span>
                     </motion.button>
@@ -360,6 +395,18 @@ const Header = () => {
                   </motion.div>
                 ))}
               </nav>
+
+              {/* Footer text */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.4, duration: 0.3 }}
+                className="absolute bottom-8 left-0 right-0 text-center px-6"
+              >
+                <p className="text-white/60 text-sm">
+                  Designed and powered by UITherapy
+                </p>
+              </motion.div>
             </motion.div>
           </motion.div>
         )}
