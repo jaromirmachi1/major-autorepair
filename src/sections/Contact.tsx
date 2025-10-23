@@ -313,7 +313,7 @@ const Contact = () => {
                   </div>
                   <div>
                     <h4 className="font-semibold text-black mb-1">Telefon</h4>
-                    <p className="text-gray-600">+420 123 456 789</p>
+                    <p className="text-gray-600">+420 774 077 551</p>
                   </div>
                 </div>
 
@@ -333,7 +333,7 @@ const Contact = () => {
                   </div>
                   <div>
                     <h4 className="font-semibold text-black mb-1">Email</h4>
-                    <p className="text-gray-600">info@marina.cz</p>
+                    <p className="text-gray-600">autodilyhonda@gmail.com</p>
                   </div>
                 </div>
 
@@ -356,9 +356,9 @@ const Contact = () => {
                       Otevírací Doba
                     </h4>
                     <p className="text-gray-600">
-                      Po - Pá: 8:00 - 18:00
+                      Po - Pá: 8:00 - 17:00
                       <br />
-                      So: 9:00 - 16:00
+                      So: Zavřeno
                       <br />
                       Ne: Zavřeno
                     </p>
