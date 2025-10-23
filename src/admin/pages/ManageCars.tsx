@@ -641,18 +641,6 @@ function ManageCars() {
                   <div className="flex items-center">
                     <input
                       type="checkbox"
-                      name="featured"
-                      checked={formData.featured}
-                      onChange={handleInputChange}
-                      className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
-                    />
-                    <label className="ml-2 text-sm font-medium text-gray-700">
-                      Prémiové vozidlo (zobrazí se na hlavní stránce)
-                    </label>
-                  </div>
-                  <div className="flex items-center">
-                    <input
-                      type="checkbox"
                       name="pinned"
                       checked={formData.pinned}
                       onChange={handleInputChange}
