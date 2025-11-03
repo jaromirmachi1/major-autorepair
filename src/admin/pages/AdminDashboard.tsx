@@ -3,11 +3,42 @@ import { useNavigate } from "react-router-dom";
 import { useCars } from "../../hooks/useCars";
 import { loadMockCarsToLocalStorage } from "../../utils/loadMockCars";
 import { isSupabaseConfigured } from "../../config/supabase";
+import { getTotalMessagesCount, getUnreadMessagesCount } from "../../services/supabaseMessagesService";
+import { useState, useEffect } from "react";
 
 function AdminDashboard() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const { cars } = useCars();
+  const [totalMessages, setTotalMessages] = useState<number>(0);
+  const [unreadMessages, setUnreadMessages] = useState<number>(0);
+  const [loading, setLoading] = useState<boolean>(true);
+
+  useEffect(() => {
+    const fetchMessagesCount = async () => {
+      if (isSupabaseConfigured) {
+        try {
+          const [total, unread] = await Promise.all([
+            getTotalMessagesCount(),
+            getUnreadMessagesCount(),
+          ]);
+          setTotalMessages(total);
+          setUnreadMessages(unread);
+        } catch (error) {
+          console.error("Error fetching messages count:", error);
+        } finally {
+          setLoading(false);
+        }
+      } else {
+        setLoading(false);
+      }
+    };
+
+    fetchMessagesCount();
+    // Refresh every 30 seconds to get updated counts
+    const interval = setInterval(fetchMessagesCount, 30000);
+    return () => clearInterval(interval);
+  }, []);
 
   const handleLogout = async () => {
     try {
@@ -82,9 +113,23 @@ function AdminDashboard() {
               <h3 className="text-lg font-semibold text-green-900">Služby</h3>
               <p className="text-3xl font-bold text-green-600">0</p>
             </div>
-            <div className="bg-purple-50 p-4 rounded-lg">
-              <h3 className="text-lg font-semibold text-purple-900">Zprávy</h3>
-              <p className="text-3xl font-bold text-purple-600">0</p>
+            <div className="bg-purple-50 p-4 rounded-lg relative">
+              <div className="flex items-center justify-between">
+                <h3 className="text-lg font-semibold text-purple-900">Zprávy</h3>
+                {unreadMessages > 0 && (
+                  <span className="bg-red-500 text-white text-xs font-bold rounded-full w-6 h-6 flex items-center justify-center animate-pulse">
+                    !
+                  </span>
+                )}
+              </div>
+              <p className="text-3xl font-bold text-purple-600">
+                {loading ? "..." : totalMessages}
+              </p>
+              {unreadMessages > 0 && (
+                <p className="text-sm text-red-600 font-semibold mt-1">
+                  {unreadMessages} nepřečtených
+                </p>
+              )}
             </div>
           </div>
 

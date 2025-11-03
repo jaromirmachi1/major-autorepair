@@ -126,6 +126,27 @@ export const deleteMessageFromSupabase = async (
 };
 
 /**
+ * Get total messages count
+ * @returns Number of total messages
+ */
+export const getTotalMessagesCount = async (): Promise<number> => {
+  try {
+    const { count, error } = await supabase
+      .from(MESSAGES_TABLE)
+      .select("*", { count: "exact", head: true });
+
+    if (error) {
+      throw error;
+    }
+
+    return count || 0;
+  } catch (error) {
+    console.error("❌ Error getting total messages count:", error);
+    return 0;
+  }
+};
+
+/**
  * Get unread messages count
  * @returns Number of unread messages
  */
