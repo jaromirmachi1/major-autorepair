@@ -95,7 +95,7 @@ const Services = () => {
       icon: Shield,
       title: "Brzdový Systém",
       description:
-        "Profesionální kontrola brzd, výměna destiček, broušení kotoučů a opravy hydrauliky.",
+        "Profesionální kontrola brzd, výměna destiček a opravy hydrauliky.",
     },
     {
       icon: Wind,

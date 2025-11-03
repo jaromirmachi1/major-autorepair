@@ -64,7 +64,7 @@ const Cars = () => {
           className="text-center mb-16"
         >
           <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
-            Prémiová <span className="text-red-primary">Ojetá Auta</span>
+            Nabídka <span className="text-red-primary">Prémiových Vozidel</span>
           </h2>
           <p className="text-xl text-gray-400 max-w-2xl mx-auto">
             Pečlivě vybraná kvalitní vozidla zkontrolovaná a certifikovaná

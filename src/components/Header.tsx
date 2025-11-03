@@ -105,7 +105,7 @@ const Header = () => {
   const navLinks = [
     { name: "Domů", href: "hero" },
     { name: "Služby", href: "services" },
-    { name: "Ojetá Auta", href: "cars" },
+    { name: "Nabídka Vozidel", href: "cars" },
     { name: "Kontakt", href: "contact" },
   ];
 
