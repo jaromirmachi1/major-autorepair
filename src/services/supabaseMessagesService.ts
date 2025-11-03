@@ -24,7 +24,7 @@ export const addMessageToSupabase = async (
   try {
     // Don't select data after insert to avoid RLS issues
     // Just check if insert was successful
-    const { data, error } = await supabase
+    const { error } = await supabase
       .from(MESSAGES_TABLE)
       .insert([messageData]);
 
