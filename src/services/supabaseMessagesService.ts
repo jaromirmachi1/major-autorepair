@@ -22,23 +22,18 @@ export const addMessageToSupabase = async (
   messageData: Omit<ContactMessage, "id" | "created_at" | "read">
 ): Promise<string> => {
   try {
+    // Don't select data after insert to avoid RLS issues
+    // Just check if insert was successful
     const { data, error } = await supabase
       .from(MESSAGES_TABLE)
-      .insert([messageData])
-      .select("id");
+      .insert([messageData]);
 
     if (error) {
       throw error;
     }
 
-    if (data && data.length > 0) {
-      console.log("✅ Message added to Supabase with ID:", data[0].id);
-      return data[0].id;
-    } else {
-      throw new Error(
-        "Failed to retrieve ID after adding message to Supabase."
-      );
-    }
+    console.log("✅ Message added to Supabase successfully");
+    return "success";
   } catch (error) {
     console.error("❌ Error adding message to Supabase:", error);
     throw error;
