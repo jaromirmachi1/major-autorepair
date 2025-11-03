@@ -370,7 +370,7 @@ const Contact = () => {
             {/* Interactive Map */}
             <div className="rounded-xl overflow-hidden h-64 shadow-lg">
               <iframe
-                src="https://www.openstreetmap.org/export/embed.html?bbox=16.8349%2C49.0482%2C16.8389%2C49.0502&layer=mapnik&marker=49.0492%2C16.8369"
+                src="https://www.openstreetmap.org/export/embed.html?bbox=16.8340%2C49.0500%2C16.8385%2C49.0526&layer=mapnik&marker=49.051307%2C16.836293"
                 width="100%"
                 height="100%"
                 style={{ border: 0 }}

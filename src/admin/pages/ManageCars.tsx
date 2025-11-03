@@ -139,7 +139,9 @@ function ManageCars() {
       ...prev,
       [name]:
         type === "number"
-          ? parseFloat(value)
+          ? value === ""
+            ? 0
+            : parseFloat(value) || 0
           : type === "checkbox"
           ? (e.target as HTMLInputElement).checked
           : value,

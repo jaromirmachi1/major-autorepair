@@ -22,13 +22,22 @@ ALTER TABLE contact_messages ENABLE ROW LEVEL SECURITY;
 
 -- Drop existing policies if they exist (to avoid conflicts)
 DROP POLICY IF EXISTS "Anyone can insert contact messages" ON contact_messages;
+DROP POLICY IF EXISTS "Public can insert contact messages" ON contact_messages;
+DROP POLICY IF EXISTS "Allow anonymous inserts" ON contact_messages;
+DROP POLICY IF EXISTS "Anonymous users can insert contact messages" ON contact_messages;
+DROP POLICY IF EXISTS "Authenticated users can insert contact messages" ON contact_messages;
+DROP POLICY IF EXISTS "Enable insert for all users" ON contact_messages;
 DROP POLICY IF EXISTS "Authenticated users can view all messages" ON contact_messages;
 DROP POLICY IF EXISTS "Authenticated users can update messages" ON contact_messages;
 DROP POLICY IF EXISTS "Authenticated users can delete messages" ON contact_messages;
 
--- Create policies for public access (contact form)
-CREATE POLICY "Anyone can insert contact messages" ON contact_messages
-  FOR INSERT WITH CHECK (true);
+-- Create policy for public access (contact form)
+-- This MUST allow anonymous users to insert messages
+-- Using TO public allows both anonymous and authenticated users
+CREATE POLICY "Enable insert for all users" ON contact_messages
+  FOR INSERT
+  TO public
+  WITH CHECK (true);
 
 CREATE POLICY "Authenticated users can view all messages" ON contact_messages
   FOR SELECT USING (auth.role() = 'authenticated');
@@ -72,29 +81,46 @@ COMMENT ON COLUMN cars.power IS 'Engine power output (e.g., 150 kW, 200 HP)';
 -- 3. FIX ADMIN PERMISSIONS FOR CARS
 -- ===========================================
 
--- Drop existing restrictive policies
+-- Drop ALL existing car policies to avoid conflicts
 DROP POLICY IF EXISTS "Authenticated users can insert cars" ON cars;
 DROP POLICY IF EXISTS "Users can update their own cars" ON cars;
 DROP POLICY IF EXISTS "Users can delete their own cars" ON cars;
+DROP POLICY IF EXISTS "Authenticated users can update cars" ON cars;
+DROP POLICY IF EXISTS "Authenticated users can delete cars" ON cars;
+DROP POLICY IF EXISTS "Users can view all cars" ON cars;
 
 -- Create new policies that allow any authenticated user to manage cars
+-- SELECT: Allow everyone to view cars (public website)
+CREATE POLICY "Users can view all cars" ON cars
+  FOR SELECT 
+  USING (true);
+
+-- INSERT: Check if user is authenticated (has a valid auth.uid())
 CREATE POLICY "Authenticated users can insert cars" ON cars
-  FOR INSERT WITH CHECK (auth.role() = 'authenticated');
+  FOR INSERT 
+  WITH CHECK (auth.uid() IS NOT NULL);
 
+-- UPDATE: Allow authenticated users to update any car
 CREATE POLICY "Authenticated users can update cars" ON cars
-  FOR UPDATE USING (auth.role() = 'authenticated');
+  FOR UPDATE 
+  USING (auth.uid() IS NOT NULL);
 
+-- DELETE: Allow authenticated users to delete any car
 CREATE POLICY "Authenticated users can delete cars" ON cars
-  FOR DELETE USING (auth.role() = 'authenticated');
+  FOR DELETE 
+  USING (auth.uid() IS NOT NULL);
 
 -- ===========================================
 -- 4. FIX STORAGE POLICIES FOR CAR IMAGES
 -- ===========================================
 
--- Also update storage policies to be more permissive for admin users
+-- Drop ALL existing storage policies to avoid conflicts
 DROP POLICY IF EXISTS "Users can update their own car images" ON storage.objects;
 DROP POLICY IF EXISTS "Users can delete their own car images" ON storage.objects;
+DROP POLICY IF EXISTS "Authenticated users can update car images" ON storage.objects;
+DROP POLICY IF EXISTS "Authenticated users can delete car images" ON storage.objects;
 
+-- Create new storage policies for admin users
 CREATE POLICY "Authenticated users can update car images" ON storage.objects
   FOR UPDATE USING (bucket_id = 'car-images' AND auth.role() = 'authenticated');
 
