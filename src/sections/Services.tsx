@@ -180,6 +180,22 @@ const Services = () => {
               </motion.div>
             );
           })}
+          {/* Logo Cell */}
+          <motion.div
+            variants={itemVariants}
+            whileHover={{ y: -5 }}
+            transition={{ duration: 0.3 }}
+          >
+            <SpotlightCard className="cursor-pointer h-full">
+              <div className="p-8 flex items-center justify-center h-full">
+                <img
+                  src="/autodilyhondalogo.PNG"
+                  alt="Autodily Honda Logo"
+                  className="max-w-[200px] h-auto object-contain"
+                />
+              </div>
+            </SpotlightCard>
+          </motion.div>
         </motion.div>
 
         {/* CTA */}
