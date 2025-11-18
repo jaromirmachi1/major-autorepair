@@ -86,7 +86,7 @@ function ManageCars() {
     setUploadError("");
 
     // Check total number of files (limit based on storage type)
-    const maxFiles = isSupabaseConfigured ? 10 : 3;
+    const maxFiles = isSupabaseConfigured ? 20 : 3;
     if (uploadedFiles.length + files.length > maxFiles) {
       setUploadError(`Můžete nahrát maximálně ${maxFiles} fotografií.`);
       return;
@@ -112,7 +112,7 @@ function ManageCars() {
   const convertFilesToUrls = async (files: File[]): Promise<string[]> => {
     try {
       // Limit based on storage type
-      const maxFiles = isSupabaseConfigured ? 10 : 3;
+      const maxFiles = isSupabaseConfigured ? 20 : 3;
       const limitedFiles = files.slice(0, maxFiles);
 
       // Use image service to upload files
@@ -529,7 +529,7 @@ function ManageCars() {
                         <p className="text-xs text-gray-500 mt-1">
                           {isSupabaseConfigured ? (
                             <>
-                              Nahrávání do Supabase Storage - až 10 fotografií
+                              Nahrávání do Supabase Storage - až 20 fotografií
                               (JPG, PNG, max 10MB každá)
                             </>
                           ) : (
@@ -568,7 +568,7 @@ function ManageCars() {
                         <div>
                           <p className="text-sm font-medium text-gray-700 mb-2">
                             Nahrané fotografie ({uploadedFiles.length}/
-                            {isSupabaseConfigured ? 10 : 3}):
+                            {isSupabaseConfigured ? 20 : 3}):
                           </p>
                           <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
                             {uploadedFiles.map((file, index) => (

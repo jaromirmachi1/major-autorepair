@@ -278,7 +278,7 @@ const CarDetail = () => {
 
                 {/* Thumbnail Gallery */}
                 {hasMultipleImages && (
-                  <div className="flex gap-3 overflow-x-auto pb-2">
+                  <div className="flex gap-3 overflow-x-auto pb-2 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
                     {images.map((image, index) => (
                       <button
                         key={index}
