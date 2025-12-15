@@ -150,6 +150,32 @@ const Services = () => {
           </p>
         </motion.div>
 
+        {/* Logo Section */}
+        <motion.div
+          variants={itemVariants}
+          initial="hidden"
+          animate={isInView ? "visible" : "hidden"}
+          className="mb-12 w-full"
+        >
+          <SpotlightCard className="cursor-pointer">
+            <div className="p-6">
+              <div className="flex items-center justify-center">
+                <img
+                  src="/autodilyhondalogo.PNG"
+                  alt="Autodily Honda Logo"
+                  className="max-w-[200px] h-auto object-contain"
+                />
+              </div>
+
+              <p className="text-gray-600 text-center">
+                Oficiální autorizovaný prodejce originálních náhradních dílů
+                Honda. Zajišťujeme kvalitní díly pro všechny modely Honda s
+                plnou zárukou.
+              </p>
+            </div>
+          </SpotlightCard>
+        </motion.div>
+
         {/* Services Grid */}
         <motion.div
           variants={containerVariants}
@@ -180,22 +206,6 @@ const Services = () => {
               </motion.div>
             );
           })}
-          {/* Logo Cell */}
-          <motion.div
-            variants={itemVariants}
-            whileHover={{ y: -5 }}
-            transition={{ duration: 0.3 }}
-          >
-            <SpotlightCard className="cursor-pointer h-full">
-              <div className="p-8 flex items-center justify-center h-full">
-                <img
-                  src="/autodilyhondalogo.PNG"
-                  alt="Autodily Honda Logo"
-                  className="max-w-[200px] h-auto object-contain"
-                />
-              </div>
-            </SpotlightCard>
-          </motion.div>
         </motion.div>
 
         {/* CTA */}
